@@ -1,0 +1,52 @@
+% Glossary for the document
+% Optional, but you must delete the call in main.tex
+% MIT License
+%
+% Copyright (c) 2026 HumberASV
+% Copyright (c) 2026 Carson Fujita
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\AtBeginEnvironment{thebibliography}{\renewcommand{\autocite}{\textcite}} % Change the default citation command to textcite for better readability in the bibliography
+% right now the default is set to numeric, but you can change it to authoryear or any other style supported by biblatex. 
+% Adjust the citation command accordingly if you change the style. 
+% For example, if you switch to authoryear, you might want to use \cite instead of \textcite in the bibliography.
+% \AtBeginEnvironment{thebibliography}{\renewcommand{\autocite}{\cite}} % Uncomment this line if you prefer longer citations instead
+
+% Note: Make sure you add the relevant entries to your .bib file for the citations used in the glossary.
+\section{Glossary}
+\begin{description}
+	\item[\textbf{Autonomous Surface Vehicle (ASV)}]	
+	An autonomous surface vehicle (ASV) is an unmanned vessel that operates on the sea surface without real-time input or control from human operators.\autocite{TREMBANIS2021251}
+
+	\item[\textbf{Base Station}]	
+	A fixed radio communications station that can communicate with mobile radio devices in its neighbourhood. Forms of radio communication that have base stations include radio wireless data and mobile telephony...\autocite{BASESTATION2018}
+
+	\item[\textbf{Loon-E}]	
+	Humber ASV's current ASV.\autocite{HuMBERASVTEAM}
+	
+	\item[\textbf{HumberASV}]	
+	Humber Polytechnic's Mechatronics club. A multidisciplinary team of passionate Humber Polytechnic students and professionals dedicated to advancing autonomous maritime technology.\autocite{HUMBERASVTEAM}
+
+	\item[\textbf{LIDAR}]
+	LiDAR, an acronym for “light detection and ranging,” is a remote-sensing technology that uses laser beams to measure precise distances and movement in an environment, in real time.\autocite{LIDAR}
+
+	\item[\textbf{Robot Operating System (ROS)}]	
+	The Robot Operating System (ROS) is a set of software libraries and tools that help you build robot applications.\autocite{ROS}
+\end{description}

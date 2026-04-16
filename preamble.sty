@@ -1,0 +1,97 @@
+% This is the preamble file for the LaTex template. 
+% It includes all the necessary packages and custom commands for the document.
+% Version 1.0.0
+% MIT License
+%
+% Copyright (c) 2026 HumberASV
+% Copyright (c) 2026 Carson Fujita
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+\ProvidesPackage{preamble}[2026/01/01 v1.0 Title package for Humber ASV documents]
+
+%---------------- Packages ----------------%
+
+\RequirePackage[english]{babel}
+\RequirePackage[margin=1in]{geometry}
+\RequirePackage{graphicx}           % For including images
+\RequirePackage{array}              % For better table handling
+\RequirePackage{csquotes}            % For better handling of quotations
+\RequirePackage{longtable}          % For tables that span multiple pages
+\RequirePackage{multirow}           % For multi-row cells in tables
+\RequirePackage{makecell}           % For better table formatting
+\RequirePackage{setspace}           % For line spacing
+\RequirePackage{titlesec}           % For customizing section titles
+\RequirePackage{hyperref}           % For hyperlinks in the document
+\RequirePackage[style=numeric, autocite=inline]{biblatex} % For bibliography management
+%---------------- Meta ----------------%
+
+\geometry{margin=1in}           % Set 1 inch margins
+\setlength\parindent{0pt}       % No paragraph indentation
+\setstretch{1.15}               % Set line spacing to 1.15
+
+%---------------- Bibliography ----------------%
+\addbibresource{./citations/citations.bib} % Add the bibliography resource file, adjust the path as necessary
+
+
+%---------------- Custom Commands ----------------%
+
+% Command to create a title page
+% Usage: \asvtitle[<date>]{<title>}{<version>}
+% - <date> is optional and defaults to today's date
+% - <title> is the main title of the document
+% - <version> is the version number of the document
+% Version 1.0.0
+\newcommand{\asvtitle}[3][\today]{%
+    \begin{center} % Centered title page
+        \includegraphics[width=2in]{./images/logo.png}\\[0.5cm]
+        {\Large \textbf{#2}}\\[0.2cm]
+        \textit{Humber Polytechnic}\\[0.5cm]
+        {\small \textbf{Version #3}}\\
+        {\small \textbf{Date:} #1}\\
+    \end{center}
+    \newpage
+}
+
+% Command to start the appendix section
+% Usage: \startappendix
+% This command will start the appendix section, using letters for section numbering and starting each section on a new page.
+% Version 1.0.0
+\newcommand{\startappendix}{%
+    \appendix % Start the appendix section
+    \renewcommand{\thesection}{\Alph{section}} % Use letters for section numbering in the appendix
+    \titleformat{\section}{\large\bfseries}{\thesection}{0.5em}{} % Customize section titles and start each section on a new page
+}
+
+% Command to start the table of contents, list of figures, and list of tables
+% Usage: \startcontents
+% This command will generate the table of contents, list of figures, and list of tables, each starting on a new page.
+% Version 1.0.0
+\newcommand{\startcontents}{%
+    \tableofcontents
+    \newpage
+    \listoffigures
+    \newpage
+    \listoftables
+}
+
+
+%---------------- Meta ----------------%
+% This is here because of Content having section titles
+\titleformat{\section}{\large\bfseries}{\thesection}{0.5em}{\newpage} % Customize section titles and start each section on a new page
+\titleformat{\subsection}{\normalsize\bfseries}{\ }{0pt}{} % Customize subsection titles
