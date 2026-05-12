@@ -24,6 +24,7 @@
 
 % setup section for software development
 \section{Docker Use}
+\label{sec:docker-setup}
 
 Docker is a powerful tool for creating, deploying, and running applications in containers. It allows you to package your application with all of its dependencies into a standardized unit for software development. This can be particularly useful for ROS~2 development, as it can help ensure that your development environment is consistent across different machines and operating systems.
 
@@ -180,6 +181,7 @@ docker run --runtime nvidia -it --privileged --net=host --ipc=host --gpus all --
 \notebox{\texttt{ROS\_DOMAIN\_ID}, \texttt{ROS\_LOCALHOST\_ONLY}, and \texttt{RMW\_IMPLEMENTATION} should be set in your host environment before running the container; they will be passed into the container as environment variables. This ensures that the ROS~2 configuration within the container matches that of the host environment.}
 
 \section{Colcon Setup}
+\label{sec:colcon-setup}
 
 \subsection{Background}
 

@@ -23,6 +23,10 @@
 % SOFTWARE.
 \section{ROS2 Design}
 
+We are currently undergoing changes to our ROS2 Architecture to better fit our needs and constraints.
+The current architecture consists of 7 nodes: Control, Map, Movement, Planning, Base Station, ROS2 Publish Clock, and Zedx Camera. The data distribution between these nodes is illustrated in Table \ref{tab:current-ros2-nodes}.
+The proposed architecture consists of 8 nodes: Control, Map, Movement, Base Station, ROS2 Publish Clock, Bound\_Box\_Video, and Zedx Camera. The data distribution between these nodes is illustrated in Table \ref{tab:proposed-ros2-nodes}.
+
 \begin{table}[H]
     \centering
     \begin{tabular}{|c|c|}
@@ -58,11 +62,11 @@
         \hline
     \end{tabular}
     \caption{Current Primary Computer ROS2 Nodes Data Distribution}
-    \label{tab:ros2-nodes}
+    \label{tab:current-ros2-nodes}
 \end{table}
 \footnotetext{The Zedx Camera node subscribes to the clock topic to synchronize its data publishing with Isaac SIM.\autocite{STEREOLABSISAAC}}
-movement needs pose and odometry data to move.
-zedx camera needs to publish objects and mapping receive it
+
+\notebox{Movement needs pose and odometry data to move. The Zedx camera needs to publish objects and mapping receive it.}
 
 \begin{table}[H]
     \centering
@@ -71,15 +75,16 @@ zedx camera needs to publish objects and mapping receive it
         \textbf{Node Name} & \textbf{Subscriptions} & \textbf{Publications} \\
         \hline
         Control & map (local), map (global), objects & twist, status\\
-        Map & objects\footnotemark & map (local) \\
+        Map & pose, odom, objects\footnotemark & map (local) \\
         Movement Node & twist, status & health (movement), power \\
         Base Station & ALL & None \\
         ROS2 Publish Clock & None & clock \\
         Zedx Camera & clock & objects, pose, image\_rect\_color, map (global) \\
+        Bound\_Box\_Video & objects, image\_rect\_color & video\_feed \\
         \hline
     \end{tabular}
     \caption{Proposed Computer ROS2 Node Data Distribution}
-    \label{tab:ros2-nodes}
+    \label{tab:proposed-ros2-nodes}
 \end{table}
 \footnotetext{Zedx Objects contains location and classification data \autocite{STEREOLABSOBJ}.}
 

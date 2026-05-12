@@ -65,44 +65,81 @@ This command will launch the ROS2 nodes---including Zedx-Wrapper---for the Loon-
 
 \subsection{Troubleshooting}
 
+\notebox{For most issues, you may benefit from reading Section \ref{sec:docker-setup} or \ref{sec:colcon-setup} to ensure your environment is set up correctly.}
 If you encounter issues while running the software, here are some common troubleshooting steps:
 
-\begin{description}
-    \item[Camera not connecting]
-    If the ZedX camera is not connecting or functioning properly, try the following steps:
-        \begin{itemize}
-            \item Ensure that the ZedX camera is properly connected to the primary computer and powered on.
-            \item Check the camera's physical connection and power status, and ensure that it is securely plugged in.
-            \item Verify that the necessary drivers and software for the ZedX camera are installed and up to date \\
-                \begin{verbatim}
-                    apt list --installed | grep zed
-                \end{verbatim} 
-                Should show the zedlink-duo and ros-humble-zed-msgs packages
-            \item Check diagnostics
-                \begin{verbatim}
-                    ZED_Diagnostic
-                \end{verbatim} 
-                This should show diagnostic messages from the ZedX camera, which can help identify any issues with the camera's operation.
-                \textbf{Note:} If in a container the diagnostic tool will not detect the driver, you will need to run it on the host machine.
-        \end{itemize}
+\subsubsection{Camera not connecting}
+If the ZedX camera is not connecting or functioning properly, try the following steps:
+    \begin{itemize}
+        \item Ensure that the ZedX camera is properly connected to the primary computer and powered on.
+        \item Check the camera's physical connection and power status, and ensure that it is securely plugged in.
+        \item Verify that the necessary drivers and software for the ZedX camera are installed and up to date \\
+            \begin{verbatim}
+                apt list --installed | grep zed
+            \end{verbatim} 
+            This should show the zedlink-duo and ros-humble-zed-msgs packages
+        \item Check diagnostics
+            \begin{verbatim}
+                ZED_Diagnostic
+            \end{verbatim} 
+            This should show diagnostic messages from the ZedX camera, which can help identify any issues with the camera's operation.
+    \end{itemize}
+    \warningbox{If in a container the diagnostic tool will not detect the driver, you will need to run it on the host machine}
+    \notebox{If the camera is not connecting, it may be due to a hardware issue, driver issue, or configuration issue. Checking the physical connection, verifying software installation, and reviewing diagnostic messages can help identify and resolve the problem.}
 
-    \item[ROS2 nodes not communicating]
-    If the ROS2 nodes are not communicating properly, try the following steps:
-        \begin{itemize}
-            \item Ensure that all ROS2 nodes are properly launched and running.
-            \item Check the ROS2 topic list to verify that the expected topics are being published and subscribed to:
-                \begin{verbatim}
-                    ros2 topic list
-                \end{verbatim}
-            \item Use ROS2 topic echo to check the data being published on specific topics:
-                \begin{verbatim}
-                    ros2 topic echo <topic_name>
-                \end{verbatim}
-            \item Check for any error messages in the terminal where the nodes are running, which may indicate issues with node communication or configuration.
-            \item Verify that the ROS2 middleware (Cyclone DDS) is properly configured and running, as it is responsible for facilitating communication between nodes.
-            \item Ensure the topics are being run on the same Domain ID, as ROS2 uses DDS which requires all nodes to be on the same Domain ID to communicate.
-            \item Check for any firewall or network issues that may be preventing communication between nodes, especially if running across multiple machines.
-            \item Verify that the ROS2 environment variables are properly set, as incorrect environment configurations can lead to communication issues between nodes.
-            \item If using Docker, ensure that the container has the necessary network configurations to allow communication between nodes, especially if nodes are running in different containers or on the host machine.
-        \end{itemize}
-\end{description}
+\subsubsection{ROS2 nodes not communicating}
+If the ROS2 nodes are not communicating properly, try the following steps:
+\begin{itemize}
+    \item Ensure that all ROS2 nodes are properly launched and running.
+    \item Check the ROS2 topic list to verify that the expected topics are being published and subscribed to:
+        \begin{verbatim}
+            ros2 topic list
+        \end{verbatim}
+    \item Use ROS2 topic echo to check the data being published on specific topics:
+        \begin{verbatim}
+            ros2 topic echo <topic_name>
+        \end{verbatim}
+    \item Check for any error messages in the terminal where the nodes are running, which may indicate issues with node communication or configuration.
+    \item Verify that the ROS2 middleware (Cyclone DDS) is properly configured and running, as it is responsible for facilitating communication between nodes.
+    \item Ensure the topics are being run on the same Domain ID, as ROS2 uses DDS which requires all nodes to be on the same Domain ID to communicate.
+    \item Check for any firewall or network issues that may be preventing communication between nodes, especially if running across multiple machines.
+    \item Verify that the ROS2 environment variables are properly set, as incorrect environment configurations can lead to communication issues between nodes.
+    \item If using Docker, ensure that the container has the necessary network configurations to allow communication between nodes, especially if nodes are running in different containers or on the host machine.
+\end{itemize}
+
+\subsubsection{ROS2 topic list waiting indefinitely}
+Your ROS2 topic list may be waiting indefinitely due to a misconfiguration in the ROS2 environment variables, network issues, or problems with the ROS2 middleware (Cyclone DDS). Here are some steps to troubleshoot this issue:
+    \begin{itemize}
+        \item Check that the ROS2 environment variables are properly set, especially \texttt{ROS\_DOMAIN\_ID}, \texttt{ROS\_LOCALHOST\_ONLY}, and \texttt{RMW\_IMPLEMENTATION}. Incorrect settings can lead to communication issues and cause the topic list to wait indefinitely. You can read about them in Section \ref{sec:colcon-setup}.
+        \item Verify that the ROS2 middleware (Cyclone DDS) is properly configured and running, as it is responsible for facilitating communication between nodes. Issues with the middleware can lead to communication problems and cause the topic list to hang.
+        \item Check for any firewall or network issues that may be preventing communication between nodes, especially if running across multiple machines. Network misconfigurations can lead to communication failures and cause the topic list to wait indefinitely.
+        \item Ensure that all ROS2 nodes are properly launched and running, as missing or non-functional nodes can lead to communication issues and cause the topic list to hang.
+        \item If using Docker, ensure that the container has the necessary network configurations (see Section~\ref{sec:docker-setup}) to allow communication between nodes, especially if nodes are running in different containers or on the host machine. Docker network misconfigurations can lead to communication failures and cause the topic list to wait indefinitely.
+    \end{itemize}
+
+\subsubsection{RVIZ not displaying data}
+
+\notebox{RVIZ has been modified for stereocameras under Zed ROS 2 Wrapper, use the modified version of RVIZ for best results.}
+
+RVIZ is a visualization tool for ROS2 that allows users to visualize sensor data, robot models, and other information. If RVIZ is not displaying data properly, try the following steps:
+    \begin{itemize}
+        \item Ensure that RVIZ is properly installed and launched.
+        \item Check that the correct ROS2 topics are being visualized in RVIZ, and that they are being published with the expected data.
+        \item Verify that the RVIZ configuration is set up correctly, including the fixed frame and any necessary transforms.
+        \item Check for any error messages in the terminal where RVIZ is running, which may indicate issues with data visualization or configuration.
+        \item Ensure that the necessary RVIZ plugins are installed and configured to visualize the specific types of data being published by the nodes.
+    \end{itemize}
+
+    Other issues may arise such as:
+
+    \begin{itemize}
+        \item Nodes not launching properly
+        \item Data not being published or subscribed to as expected
+        \item Network communication issues between nodes
+        \item Hardware issues with sensors or the primary computer
+        \item Zedx Configuration issues (likely cause)
+    \end{itemize}
+
+\subsubsection{Simulation issues}
+Currently there are only one setup for our branch of the ROS2 wrapper for the ZedX camera, which is to build the wrapper from our repository and not to use in ROS2 Isaac SIM bridge.
+This is because we haven't done that yet.
