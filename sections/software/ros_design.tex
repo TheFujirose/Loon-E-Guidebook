@@ -1,0 +1,109 @@
+% ROS2 Design
+% MIT License
+%
+% Copyright (c) 2026 HumberASV
+% Copyright (c) 2026 Carson Fujita
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+\section{ROS2 Design}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Node Name} & \textbf{Purpose} \\
+        \hline
+        Control Node & Executes control logic and navigation commands \\
+        Map Node & Maintains and updates local environmental map \\
+        Movement Node & Manages motor control and vehicle movement \\
+        Planning Node & Computes navigation paths to destination \\
+        Base Station Node & Monitors and logs all system data \\
+        ROS2 Publish Clock Node & Synchronizes simulation timing across nodes \\
+        Zedx Camera Node & Processes stereo vision and object detection \\
+        \hline
+    \end{tabular}
+    \caption{Primary Computer ROS2 Nodes}
+    \label{tab:ros2-nodes-overview}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Node Name} & \textbf{Subscriptions} & \textbf{Publications} \\
+        \hline
+        Control & map (local), objects, locations &  PWM \\
+        Map & obstacles, locations & map (local) \\
+        Movement Node & PWM & not implemented \\
+        Base Station & ALL & None \\
+        Planning node & map (local), destination & path\\
+        ROS2 Publish Clock & None & clock \\
+        Zedx Camera & clock\footnotemark & objects, pose, image\_rect\_color, map (global) \\
+        \hline
+    \end{tabular}
+    \caption{Current Primary Computer ROS2 Nodes Data Distribution}
+    \label{tab:ros2-nodes}
+\end{table}
+\footnotetext{The Zedx Camera node subscribes to the clock topic to synchronize its data publishing with Isaac SIM.\autocite{STEREOLABSISAAC}}
+movement needs pose and odometry data to move.
+zedx camera needs to publish objects and mapping receive it
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Node Name} & \textbf{Subscriptions} & \textbf{Publications} \\
+        \hline
+        Control & map (local), map (global), objects & twist, status\\
+        Map & objects\footnotemark & map (local) \\
+        Movement Node & twist, status & health (movement), power \\
+        Base Station & ALL & None \\
+        ROS2 Publish Clock & None & clock \\
+        Zedx Camera & clock & objects, pose, image\_rect\_color, map (global) \\
+        \hline
+    \end{tabular}
+    \caption{Proposed Computer ROS2 Node Data Distribution}
+    \label{tab:ros2-nodes}
+\end{table}
+\footnotetext{Zedx Objects contains location and classification data \autocite{STEREOLABSOBJ}.}
+
+% \begin{table}[H]
+%     \centering
+%     \begin{tabular}{|c|c|}
+%         \hline
+%         \textbf{Node} & \textbf{Type} \\
+%         \hline
+%         \hline
+%     \end{tabular}
+%     \caption{Current ROS2 Topics}
+%     \label{tab:ros2-topics}
+% \end{table}
+
+% \begin{table}[H]
+%     \centering
+%     \begin{tabular}{|c|c|}
+%         \hline
+%         \textbf{Topic Name} & \textbf{Message Type} \\
+%         \hline
+%         \hline
+%     \end{tabular}
+%     \caption{Current ROS2 Topics}
+%     \label{tab:ros2-topics}
+% \end{table}
+

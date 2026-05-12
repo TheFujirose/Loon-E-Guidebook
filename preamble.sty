@@ -35,6 +35,7 @@
 \RequirePackage{longtable}          % For tables that span multiple pages
 \RequirePackage{multirow}           % For multi-row cells in tables
 \RequirePackage{makecell}           % For better table formatting
+\RequirePackage{float}              % For H placement specifier to prevent float separation
 \RequirePackage{setspace}           % For line spacing
 \RequirePackage{titlesec}           % For customizing section titles
 \RequirePackage{hyperref}           % For hyperlinks in the document
@@ -47,7 +48,7 @@
 
 %---------------- Bibliography ----------------%
 \addbibresource{./citations/citations.bib} % Add the bibliography resource file, adjust the path as necessary
-
+\addbibresource{./citations/software.bib} % Software bibliography resource file
 
 %---------------- Custom Commands ----------------%
 
@@ -88,10 +89,27 @@
     \listoffigures
     \newpage
     \listoftables
+    \newpage
 }
 
+% Command to make a large warning box for important notes
+% Usage: \warningbox{<warning message>}
+% This command will create a large warning box with the specified warning message, making it visually distinct
+% Version 1.1.0
+\newcommand{\warningbox}[2][]{%
+    \begin{center}
+    \fbox{%
+        \parbox{0.95\linewidth}{%
+            \centering
+            \textbf{\Large WARNING}\\[0.5em]
+            #2 \\ % Required argument for the warning message
+            #1 % Optional argument for the warning message
+        }%
+    }
+    \end{center}
+}
 
 %---------------- Meta ----------------%
 % This is here because of Content having section titles
-\titleformat{\section}{\large\bfseries}{\thesection}{0.5em}{\newpage} % Customize section titles and start each section on a new page
+\titleformat{\section}{\large\bfseries}{\thesection}{0.5em}{} % Customize section titles and start each section on a new page
 \titleformat{\subsection}{\normalsize\bfseries}{\ }{0pt}{} % Customize subsection titles

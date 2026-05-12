@@ -1,0 +1,95 @@
+% Software Overview
+% MIT License
+%
+% Copyright (c) 2026 HumberASV
+% Copyright (c) 2026 Carson Fujita
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Software System}
+The software system of the Loon-E ASV is responsible for controlling the vehicle's operations, including navigation, sensor data processing, and communication.
+The entire system can be illustrated in Figure \ref{fig:dfd1}, which illustrates a 3 process system consisting of a base station, the primary computer, and a web client. These 3 components work together to realize the software system of the ASV. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{./images/dfd1.png}
+    \caption{Level 1 Data Flow Diagram}
+    \label{fig:dfd1}
+\end{figure}
+
+The Loon-E ASV system sends a variety of data which need to be remotely accessed and visualized by users. 
+This data must be transmitted from the ASV to the Base Station, which will then be accessed by users through a web client application.
+
+\newpage % prevent the table below from being separated from the footnote
+\subsection{Primary Computer}
+The primary computer is responsible for controlling the ASV's operations, including navigation, sensor data processing, and communication. 
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Technology} & \textbf{Purpose} \\
+        \hline
+        ROS2 Humble & Robotics middleware for communication and control \\
+        \hline
+        Ubuntu Jazzy Jellyfish & Operating system for the primary computer \\
+        \hline
+        Cyclone DDS & (ROS middleware) Chosen data distribution service\footnotemark \\
+        \hline
+        Zedx SDK & Software development kit for the Zedx camera \\
+        \hline
+        Docker & Containerization platform for software deployment \\
+        \hline
+    \end{tabular}
+    \caption{Primary Computer Software Stack}
+    \label{tab:primary-computer-software}
+\end{table}
+\footnotetext{ROS2 supports multiple DDS implementations, however, Stereolabs, the manufacturer of the Zedx camera, only provides support for Cyclone DDS \autocite{STEREOLABSDDS} \autocite{ROS2DDS}.}
+
+\subsubsection{ROS2 Humble}
+ROS2 Humble is a robotics middleware that provides a framework for building robot applications.
+It offers a collection of tools, libraries, and conventions that simplify the development of complex robotic systems \autocite{ROS2Humble}.
+
+We designed a series of nodes--processes that perform specific tasks--to run on the primary computer, which communicate with each other using ROS2 topics and services.
+Figure \ref{fig:dfd1_1} illustrates a level 1.1 data flow diagram for the primary computer, which breaks down the primary computer process from Figure \ref{fig:dfd1} into its constituent nodes and their interactions.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{./images/dfd1_1.png}
+    \caption{Level 1.1 Data Flow Diagram for Primary Computer}
+    \label{fig:dfd1_1}
+\end{figure}
+
+To test and send data from the primary computer to the base station, we set up a ROS2 publisher node that sends simulated sensor data to a ROS2 subscriber node running on the base station.
+Additionally, for testing purposes, we set up a ROS2 subscriber node on a secondary server computer that runs a simulation on Isaac SIM.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{./images/software-architecture.png}
+    \caption{Software Architecture Diagram}
+    \label{fig:software-architecture}
+\end{figure}
+
+The web client provides a user interface for monitoring the ASV remotely.
+The base station is responsible for receiving data from the ASV for diagnostic monitoring and hosting the web client.
+\include{sections/software/development.tex}
+\include{sections/software/development/remote.tex}
+\include{sections/software/development/running.tex}
+\include{sections/software/ros_design.tex}

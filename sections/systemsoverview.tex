@@ -1,3 +1,4 @@
+% Systems Overview
 % MIT License
 %
 % Copyright (c) 2026 HumberASV
@@ -20,26 +21,16 @@
 % LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
-\documentclass{article}
+\section{Systems Overview}
+The Loon-E ASV is an autonomous surface vehicle designed to operate on water. It is not equipped to be underwater; please don't try to submerge it. 
+Loon-E is designed to be modular and adaptable, allowing for various configurations and payloads to suit different tasks as competition requirements evolve \autocite{HUMBERASVREPORT2026}.
 
-\usepackage{preamble} % Load packages and define commands
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{./images/system_context.png}
+    \caption{System Context Diagram}
+    \label{fig:context-diagram}
+\end{figure}
 
-\begin{document}
+%TODO: Talk to electrical team about the electrical system and add a section on it here.
 
-\asvtitle{Humber ASV Document Title}{1.0.0} % Custom title page see preamble.sty for details
-\startcontents % Start the table of contents section see preamble.sty for details
-% Input your sections here
-\input{sections/introduction.tex}
-\input{sections/systemsoverview.tex}
-\input{sections/software/overview.tex}
-% \input{sections/methodology.tex}
-
-\newpage % separate the main content from the appendix with a new page
-\startappendix % Start the appendix section see preamble.sty for details
-
-\input{sections/glossary.tex} % Example appendix section
-\newpage
-%---------------- Appendix Biblography ----------------%
-\section{Bibliography}
-\printbibliography[heading=none] % Should be formated according to the biblatex settings in preamble.sty
-\end{document}

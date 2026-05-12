@@ -1,0 +1,62 @@
+% Software Overview
+% MIT License
+%
+% Copyright (c) 2026 HumberASV
+% Copyright (c) 2026 Carson Fujita
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+% This remote connections for Loon-E ASV
+% This is separated from the development section as this may change more frequently.
+\section{Remote Connections}
+\label{sec:remote-connections}
+
+Local development is done on the ASV's primary computer, which is a Jetson Orin.
+Remote access to the primary computer is necessary for monitoring the ASV's operations and for development purposes.
+
+In order to connect, the lovely folks at TailScale
+\footnote{TailScale is a popular VPN solution that provides secure and easy-to-use remote access to devices.}
+have set up a secure VPN connection to the ASV's primary computer, allowing developers to access the system remotely from their own devices.
+This VPN connection ensures that developers can securely access the ASV's primary computer from anywhere, enabling them to monitor the ASV's operations, access logs, and perform development tasks without needing to be physically present at the ASV's location.
+At cost, local development on a small device is not scalable for larger teams, fortunately, our software team is relatively small and the VPN connection provides a convenient solution for remote access to the ASV's primary computer.
+
+\subsection{TailScale Connection}
+To connect to the ASV's primary computer using TailScale, developers need to follow these steps:
+
+\begin{enumerate}
+    \item \href{https://tailscale.com/download/}{Install the TailScale client} on their local device (available for Windows, macOS, Linux, iOS, and Android).
+    \item \href{https://github.com/signup}{Create a Github account} (if they don't have one already)
+    \item Notify the software team lead of their Github username so that they can be added to our Github organization.
+    \item Sign in to TailScale using their Github credentials.\footnote{TailScale let us use their service so long as we are open source and connected to the Github organization. Developers will need to sign in with their Github account to access the VPN.}
+    \item Once signed in, they will see the ASV's primary computer listed as a device in their TailScale dashboard.
+    \item Click on the ASV's primary computer (named "ubuntu") to establish a secure VPN connection.
+    \item Once connected, developers can access the ASV's primary computer as if they were on the same local network, allowing them to monitor and develop the software remotely.
+\end{enumerate}
+
+\subsection{RustDesk Connection}
+
+In addition to the TailScale VPN connection, developers can also use RustDesk for remote desktop access to the ASV's primary computer.
+RustDesk is an open-source remote desktop software that allows users to access and control a computer remotely.
+To use RustDesk for remote desktop access, developers need to follow these steps:
+
+\begin{enumerate}
+    \item \href{https://rustdesk.com/}{Install the RustDesk client} on their local device (available for Windows, macOS, Linux, iOS, and Android).
+    \item Obtain the RustDesk ID and password for the ASV's primary computer from the software team lead.
+    \item Open the RustDesk client and enter the ASV's primary computer's RustDesk ID and password to establish a remote desktop connection.
+\end{enumerate}

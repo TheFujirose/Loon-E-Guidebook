@@ -1,0 +1,180 @@
+% Software Overview
+% MIT License
+%
+% Copyright (c) 2026 HumberASV
+% Copyright (c) 2026 Carson Fujita
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+% This covers the development information that the software team needs to know to access the codebase and contribute to the project. 
+% It should include information on how to set up the development environment, how to run the software, and how to contribute to the project. 
+% It should also include any relevant documentation or resources for developers.
+\section{Software Development}
+\label{sec:software-development}
+This section provides information on how to set up the development environment, run the software, and contribute to the Loon-E ASV project.
+It also includes relevant documentation and resources for developers to effectively contribute to the project.
+
+In order to contribute to the project, developers will need to set up their development environment with the necessary software and tools.
+The required software and tools for development are listed in Figure \ref{fig:dev-software}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.9\textwidth}
+        \begin{itemize}
+            \item \href{https://github.com}{GitHub}
+            \item \href{https://tailscale.com/download}{Tailscale}
+            \item \href{https://rustdesk.com}{Rust Desk}
+            \item \href{https://git-scm.com/install/}{Git}
+            \item \href{https://docs.ros.org/en/humble/Installation.html}{ROS2 Humble}
+            \item \href{https://www.stereolabs.com/en-ca/developers/release/}{Stereolab's ZedSDK 5.3}
+            \item \href{https://putty.org/index.html}{Putty} (optional, and for Windows only)
+            \item \href{https://filezilla-project.org/download.php}{FileZilla} (optional, and for Windows only)
+            \item \href{https://www.python.org/downloads/release/python-3100/}{Python 3.10}
+            \item \href{https://discord.com/download}{Discord} (Used for communications)
+            \item \href{https://tug.org/texlive/}{LiveTeX} (distribution of LaTex)
+            \item \href{https://nodejs.org/en/download}{NPM} (may change later)
+            \item \href{https://windowsreport.com/how-to-install-microsoft-teams/}{Microsoft Teams} (Primary Document Sharing)
+            \item \href{https://docs.docker.com/engine/install/}{Docker}
+            \item Any preferred LaTex editor
+            \item Any Preferred IDE
+            \item Any Standard Preferred Web Browser
+        \end{itemize}
+    \end{minipage}
+    \caption{Software and tools required for development.}
+    \label{fig:dev-software}
+\end{figure}
+
+\subsection{Development Resources}
+A few primary resources are available for you to get started with development:
+
+\begin{itemize}
+    \item documentation
+    \item codebase access
+    \item communication channels
+\end{itemize}
+
+At bare minimum, you'll require Latex for in-depth documentation (I.E this documentation), an IDE for code development, and a web browser for accessing the codebase and communication channels. 
+Further details on what tools you need are in Figure \ref{fig:dev-software}.
+
+\subsubsection{Documentation}
+Documentation is split into various channels, each serving a different purpose.
+
+\begin{description}
+    \item[This Document] 
+        This public document serves as the primary source of information for the Loon-E ASV project, providing comprehensive details on the design, operation, and maintenance of the ASV. 
+        It is intended to be a valuable resource for stakeholders and developers involved in the project.
+        It is designed to be modular and easily navigable, allowing readers to quickly find the information they need and so multiple developers can work on different sections without conflicts.
+
+    \item[GitHub Wiki] 
+        The public GitHub Wiki serves as a collaborative platform for developers to share information, best practices, and updates related to the project. 
+        It is a living document that evolves with the project and provides a space for developers to contribute their knowledge and insights.
+
+    \item[GitHub README] 
+        The public GitHub README file provides an overview of the project, including its purpose, features, and instructions for getting started. 
+        It serves as an introduction to the project for new developers and provides essential information for understanding the project's goals and structure.
+
+    \item[Github Issues and Pull Requests] 
+        GitHub Issues and Pull Requests serve as a platform for developers to report bugs, suggest features, and contribute code to the project. 
+        They provide a structured way for developers to collaborate and track the progress of the project.
+
+    \item[GitHub Project Board] 
+        The GitHub Project Board is used only for Software related project management and task tracking. 
+        It provides a visual representation of the project's progress, allowing developers to see what tasks are in progress, what tasks are completed, and what tasks are upcoming.
+        Debate exists on whether this or Microsoft Teams Kanban board should be the primary project management tool, but for now, the GitHub Project Board is used for software-related tasks, while the Microsoft Teams Kanban board is used for everything else.
+
+    \item[Teams Onedrive]
+        The Teams Onedrive serves as a centralized repository for project-related documents, including design files, meeting notes, and other resources. 
+        It provides a secure and organized space for storing and sharing project materials among team members.
+        You'll need to be added to the Teams Onedrive by a project manager to access it, so reach out to one if you need access (see discord).
+\end{description}
+
+\subsubsection{Codebase}
+
+\begin{description}
+    \item[GitHub Repository] 
+        The GitHub repository serves as the primary codebase for the Loon-E ASV project, hosting all source code, and some related resources; however, it is reccomended to use this document for a single source of truth.
+        It provides a collaborative platform for developers to contribute code, track changes, and manage the project's development.
+
+    \item[Branching Strategy] 
+        No current branching strategy exists, but we are in the process of implementing one. 
+        The proposed branching strategy includes a main branch for stable releases, a development branch for ongoing work
+        This strategy helps to organize the codebase and facilitate collaboration among developers.
+
+    \item[Code Reviews] 
+        Code reviews are conducted through GitHub Pull Requests, allowing team members to review and provide feedback on proposed changes before they are merged into the main codebase. 
+        This process helps to maintain code quality and ensure that changes align with the project's goals and standards.
+
+    \item[Pull Request Process] 
+        The pull request process involves creating a new branch for the proposed changes, making the necessary code modifications, and then submitting a pull request for review. 
+        Team members can comment on the pull request, suggest improvements, and ultimately approve or request changes before the code is merged into the main branch.
+        It is important to follow the established pull request process to ensure that contributions are properly reviewed and integrated into the project.
+\end{description}
+
+\subsubsection{Communication Channels}
+
+\begin{description}
+    \item[Discord]
+        The private Discord server serves as the primary communication channel for the Loon-E ASV project, allowing team members to collaborate, share updates, and discuss project-related topics in real time. 
+        It provides a platform for developers to ask questions, share ideas, and stay connected with the rest of the team.
+        You'll need to be added to the Discord server by a project manager to access it, so reach out to our email.
+
+    \item[Email]
+        Email is used for formal communications and is not for development discussions. 
+        It is used mostly for communicating with external stakeholders; however, if you wish to join us then you can reach out to our email and we will get back to you as soon as possible.
+        Our email is: \href{mailto:mechatronicsclub@humber.ca}{mechatronicsclub@humber.ca}
+
+    \item[Microsoft Teams]
+        Microsoft Teams is used for document sharing and collaboration among team members. 
+        It provides a centralized space for storing and sharing project-related documents, including design files, meeting notes, and other resources.
+        It also tracks the team Kanban board, which is used for project management and task tracking.
+        You'll need to be added to the Microsoft Teams by a project manager to access it, so reach out to one if you need access (see discord).
+\end{description}
+
+\subsection{Contribution Guidelines}
+Refer to each github repository for specific contribution guidelines, but in general, contributions to the project should follow these guidelines:
+
+\begin{itemize}
+    \item{Be respectful and collaborative in all interactions with other team members.}
+    \item{Follow the established coding standards and best practices for the project.}
+    \item{Use the pull request process for all code contributions, and ensure that your code is properly reviewed before it is merged into the main codebase.}
+    \item{Report any issues or bugs you encounter in the GitHub Issues, and provide as much detail as possible to help others understand and address the issue.}
+    \item{Stay engaged with the project and communicate regularly with other team members to ensure that your contributions align with the project's goals and priorities.}
+\end{itemize}
+
+\subsubsection{Code of Conduct}
+
+To maintain a positive and inclusive environment for all contributors, we have established a code of conduct that all team members are expected to follow; See Figure \ref{fig:code-of-conduct} for details.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.9\textwidth}
+        \begin{itemize}
+            \item Respect and Kindness: Treat others with respect and kindness. Disagreements are fine, but personal attacks, harassment, or any form of disrespectful behavior will not be tolerated.
+            \item English Only: To maintain a cohesive and inclusive community, please keep all communications in English.
+            \item No NSFW/Extreme Content: This is a robotics server focused on learning and collaboration. Any content or discussions deemed NSFW (Not Safe For Work) or extreme in nature are strictly prohibited.
+            \item Unsolicited DMs: Respect the privacy of others. Do not send unsolicited direct messages to members without their consent. If you wish to reach out to someone, please do so in a respectful manner and only after obtaining permission in the server channels.
+        \end{itemize}
+    \end{minipage}
+    \caption{Code of Conduct}
+    \label{fig:code-of-conduct}
+\end{figure}
+
+
+
+

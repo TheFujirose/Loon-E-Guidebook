@@ -1,0 +1,106 @@
+% Software Overview
+% MIT License
+%
+% Copyright (c) 2026 HumberASV
+% Copyright (c) 2026 Carson Fujita
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+% This running software for Loon-E ASV 
+\section{Running the Software}
+
+Refer to Section \ref{sec:remote-connections} for instructions on how to remotely connect to the ASV's primary computer; this is needed for running software on the ASV.
+
+Once connected to the primary computer, a \href{https://github.com/HumberASV/Loon-Env}{custom script} has been created to simplify the process of running the software.
+To start the software, developers can run the following command in the terminal:
+
+\begin{verbatim}
+    LoonE --start
+\end{verbatim}
+
+This command may also freeze the terminal and cause a temporary ~10 minute loss of connection to the ASV, but this is normal as the software is starting up and may take some time to initialize.
+This command will build and execute a docker container from configurations installed from the \href{https://github.com/HumberASV/Loon-Env}{custom script's install features}.
+\footnote{A docker container either downloads the scripts or establishes a volume from the host which has the scripts.}
+It is not reccomended to stop the process of building the container.
+
+\warningbox{Changes in container will not be saved}
+
+You may need to enter the container in multiple terminals to run different processes. 
+Follow the instructions below to enter the container:
+
+\begin{verbatim}
+    docker ps # to get the container id or name
+    docker exec -it <container_id_or_name> /bin/bash
+\end{verbatim}
+
+For our environment it is set to build ZedXWrapper from our \href{https://github.com/HumberASV/zed-ros2-wrapper}{main repository} instead of stereolabs' repository.
+This is because stereolabs' repository is actively maintained and may introduce breaking changes that can disrupt our development process.
+By building from our repository, we have more control over the software and can ensure that it remains stable and compatible with our system, allowing for a smoother development experience.
+Additionally, it makes it easier for us to set the configuration for the ZedX camera, which is crucial for our ASV's operations.
+
+To run implemented features within the container, the current command is as follows:
+\begin{verbatim}
+  ros2 launch loon_e_coms coms_launch.py
+\end{verbatim}
+
+This command will launch the ROS2 nodes---including Zedx-Wrapper---for the Loon-E ASV's communication system, allowing the ASV to send and receive data as part of its operations. See the launch file for more details on what processes are launched and how they are configured.
+
+\subsection{Troubleshooting}
+
+If you encounter issues while running the software, here are some common troubleshooting steps:
+
+\begin{description}
+    \item[Camera not connecting]
+    If the ZedX camera is not connecting or functioning properly, try the following steps:
+        \begin{itemize}
+            \item Ensure that the ZedX camera is properly connected to the primary computer and powered on.
+            \item Check the camera's physical connection and power status, and ensure that it is securely plugged in.
+            \item Verify that the necessary drivers and software for the ZedX camera are installed and up to date \\
+                \begin{verbatim}
+                    apt list --installed | grep zed
+                \end{verbatim} 
+                Should show the zedlink-duo and ros-humble-zed-msgs packages
+            \item Check diagnostics
+                \begin{verbatim}
+                    ZED_Diagnostic
+                \end{verbatim} 
+                This should show diagnostic messages from the ZedX camera, which can help identify any issues with the camera's operation.
+                \textbf{Note:} If in a container the diagnostic tool will not detect the driver, you will need to run it on the host machine.
+        \end{itemize}
+
+    \item[ROS2 nodes not communicating]
+    If the ROS2 nodes are not communicating properly, try the following steps:
+        \begin{itemize}
+            \item Ensure that all ROS2 nodes are properly launched and running.
+            \item Check the ROS2 topic list to verify that the expected topics are being published and subscribed to:
+                \begin{verbatim}
+                    ros2 topic list
+                \end{verbatim}
+            \item Use ROS2 topic echo to check the data being published on specific topics:
+                \begin{verbatim}
+                    ros2 topic echo <topic_name>
+                \end{verbatim}
+            \item Check for any error messages in the terminal where the nodes are running, which may indicate issues with node communication or configuration.
+            \item Verify that the ROS2 middleware (Cyclone DDS) is properly configured and running, as it is responsible for facilitating communication between nodes.
+            \item Ensure the topics are being run on the same Domain ID, as ROS2 uses DDS which requires all nodes to be on the same Domain ID to communicate.
+            \item Check for any firewall or network issues that may be preventing communication between nodes, especially if running across multiple machines.
+            \item Verify that the ROS2 environment variables are properly set, as incorrect environment configurations can lead to communication issues between nodes.
+            \item If using Docker, ensure that the container has the necessary network configurations to allow communication between nodes, especially if nodes are running in different containers or on the host machine.
+        \end{itemize}
+\end{description}

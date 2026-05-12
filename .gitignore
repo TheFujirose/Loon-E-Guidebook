@@ -12,3 +12,6 @@ build/
 *.fls
 *.bcf
 *.run.xml
+
+# Ignore the .vscode directory, which contains user-specific settings and configurations for Visual Studio Code.
+.vscode/
