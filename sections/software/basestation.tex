@@ -1,0 +1,100 @@
+% Software Overview
+% MIT License
+%
+% Copyright (c) 2026 HumberASV
+% Copyright (c) 2026 Carson Fujita
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Base Station}
+The Base Station is a critical component of the Loon-E ASV's software system, responsible for receiving data from the ASV and providing it to users on a web client application. It acts as an intermediary between the ASV and the users, allowing for remote access to the ASV's data and operations.
+
+
+The system will implement the connected access point (TP-Link Omada AC1200) to become a wireless access point allowing the ASV to connect to the base station.
+The TP-Link Omada access point provides the wireless link between the ASV and the local network. The access point connects by Ethernet to a switch, which uplinks to a router or Internet gateway. The base station computer stays on the same network and relays ASV data to the web client, but it does not control the ASV or perform navigation.
+In other words, The base station acts as a server that receives ASV data and serves it to the web client, while the access point, switch, and router provide the network connectivity.
+It is designed to meet the specifications required for participation in maritime robotics competitions such as RoboBoat and Njord
+
+
+\subsection{Base Station Software Stack}
+The Base Station can be a Windows, Linux, or macOS computer running ROS2 Humble, which is the same version of ROS2 used on the ASV's computer.
+
+\warningbox{The base station must be on the same network, DDS, Domain ID, and ROS2 version as the ASV's computer to receive data from the ASV.}
+
+Using CycloneDDS as the data distribution service, the base station will subscribe to all topics published by the ASV, allowing it to receive and process all relevant data from the ASV's operations. The base station will then relay this data to the web client application for visualization and monitoring by users.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{./images/dfd2.png}
+    \caption{Base Station System Diagram}
+    \label{fig:base-station-diagram}
+\end{figure}
+
+\infobox{The base station is not responsible for controlling the ASV or computing navigation paths; it only receives and displays data from the ASV.}
+
+
+\subsubsection{Previous Implementation}
+Previous implementation of the basestation used MQTT and Django running through containers to receive data from the ASV and serve it to the web client application. However, this approach was found to be less efficient and more complex than using ROS2's built-in communication capabilities with CycloneDDS. By using ROS2 and CycloneDDS, we can simplify the architecture of the base station and improve the performance of data transmission between the Base Station and the ASV.
+Additionally, we had difficulty with RTP streaming of the Zedx camera feed due to problems with the Zedxros2Wrapper's streaming capabilities.\footnote{As of the time of writing, the Zedxros2Wrapper's streaming capabilities are not fully functional, see \href{https://github.com/stereolabs/zed-ros2-wrapper/issues/289}{this issue} for more details.} 
+
+New addition will build on these lessons through the following changes to the architecture:
+\begin{description}
+    \item[ROS2 with CycloneDDS] Using ROS2's built-in communication capabilities with CycloneDDS allows for more efficient and streamlined data transmission between the ASV and the base station, eliminating the need for additional middleware like MQTT.
+    \item[Web Client Application] The web client will be simplified to Flask to reduce technical complexity.
+    \item[MQTT Removal] MQTT will be removed from the architecture to simplify the communication between the ASV and the base station, as ROS2 with CycloneDDS can handle all necessary data transmission without the need for additional middleware.
+    \item[RTP Streaming Removal] The RTP streaming of the Zedx camera feed will be removed due to the current limitations of the Zedxros2Wrapper's streaming capabilities, and instead, we will explore alternative methods for transmitting camera data from the ASV to the base station.
+\end{description}
+
+\subsection{Web Client Application}
+The web client application will display telemetry data in a user-friendly interface--following figure \ref{fig:gui}--allowing users to monitor the ASV's status and performance during operations
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{./images/gui.png}
+    \caption{Web Client Application GUI Mockup}
+    \label{fig:gui}
+\end{figure}
+
+In the Figure \ref{fig:gui} (above), Alphabetical labels correspond to the following data displayed on the web client application:
+
+\begin{description}
+	\item[A] Speedometer \\
+A speed over ground measurement in meters per second.
+	\item[B] COG heading \\
+Course over ground (COG) with trail vs plot of ideal route given by GNSS points to compare.
+	\item[C] Task \\
+The task name.
+	\item[D] Batteries: Motor and System in percentage \\
+Power bars with percent detailing the power in two battery systems in Loon-E.
+	\item[E] Task Data \\
+Contains data relevant to the current task such as a status indication, Latitude, Longitude.
+	\item[F] Map \\
+Shows plot of ideal route given by GNSS points, task locations and the boat.
+	\item[G] Signal Strength 
+	\item[H] Log \\
+Log from the Loon-E.
+	\item[I] Power and Rudder Panel \\
+Sideby side power bars detailing the power allocation in the propoller. 
+	\item[J] Recieved Image Recognition \\
+Object Detection windows from the Loon-E.\footnote{To reduce processing load the ASV will only send the video feed, and locations of detected  objects, the Base Station will be responsible for combining the two sources into one video feed and sending the results to the web client application for display.}
+\end{description}
+
+The web client application will be accessible through a web browser and will not require any additional software installation for user access; however, the use of React for dynamic content and interactive features may require users to have a modern web browser that supports React applications. 
+
+\infobox{Web Client users will also require the need of an internet connection to access any third party resources used in the web application, such as fonts, icons, or external APIs.}

@@ -33,13 +33,24 @@
 \RequirePackage{array}              % For better table handling
 \RequirePackage{csquotes}            % For better handling of quotations
 \RequirePackage{longtable}          % For tables that span multiple pages
+\RequirePackage{pdflscape}          % For landscape page orientation
 \RequirePackage{multirow}           % For multi-row cells in tables
 \RequirePackage{makecell}           % For better table formatting
 \RequirePackage{float}              % For H placement specifier to prevent float separation
 \RequirePackage{setspace}           % For line spacing
 \RequirePackage{titlesec}           % For customizing section titles
 \RequirePackage{hyperref}           % For hyperlinks in the document
+\RequirePackage[most]{tcolorbox}    % For styled content boxes
+\RequirePackage{fontawesome5}       % For warning and note icons
 \RequirePackage[style=numeric, autocite=inline]{biblatex} % For bibliography management
+
+%---------------- Hyperlink Configuration ----------------%
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    urlcolor=blue!70!black,
+    citecolor=blue!70!black
+}
 %---------------- Meta ----------------%
 
 \geometry{margin=1in}           % Set 1 inch margins
@@ -95,18 +106,76 @@
 % Command to make a large warning box for important notes
 % Usage: \warningbox{<warning message>}
 % This command will create a large warning box with the specified warning message, making it visually distinct
-% Version 1.1.0
+% Version 2.0.0
 \newcommand{\warningbox}[2][]{%
-    \begin{center}
-    \fbox{%
-        \parbox{0.95\linewidth}{%
-            \centering
-            \textbf{\Large WARNING}\\[0.5em]
-            #2 \\ % Required argument for the warning message
-            #1 % Optional argument for the warning message
-        }%
-    }
-    \end{center}
+    \begin{tcolorbox}[
+        enhanced,
+        colback=white,
+        colframe=white,
+        boxrule=0pt,
+        left=10pt,
+        right=8pt,
+        top=8pt,
+        bottom=8pt,
+        width=0.96\linewidth,
+        before=\par\smallskip\hspace*{0.02\linewidth},
+        after=\par\smallskip,
+        borderline west={3pt}{0pt}{red!80!black}
+    ]
+        {\color{red!80!black}\faExclamationTriangle}\hspace{0.5em}\textbf{\large WARNING}\\[0.4em]
+        #2\\
+        #1
+    \end{tcolorbox}
+}
+
+% Command to make a note box for informational notes
+% Usage: \notebox{<note message>}
+% This command will create a light blue note box with an information icon for optional guidance or context
+% Version 1.0.0
+\newcommand{\notebox}[2][]{%
+    \begin{tcolorbox}[
+        enhanced,
+        colback=cyan!6,
+        colframe=cyan!6,
+        boxrule=0pt,
+        left=10pt,
+        right=8pt,
+        top=8pt,
+        bottom=8pt,
+        width=0.96\linewidth,
+        before=\par\smallskip\hspace*{0.02\linewidth},
+        after=\par\smallskip,
+        borderline west={3pt}{0pt}{cyan!55!blue}
+    ]
+        {\color{cyan!55!blue}\faInfoCircle}\hspace{0.5em}\textbf{\large NOTE}\\[0.4em]
+        #2\\
+        #1
+    \end{tcolorbox}
+}
+
+% Command to make an info box for general information
+% Usage: \infobox{<info message>}
+% This command will create a light green info box with an information icon for positive status or useful details
+% Version 1.0.0
+\newcommand{\infobox}[2][]{%
+    \begin{tcolorbox}[
+        enhanced,
+        colback=green!6,
+        colframe=green!6,
+        boxrule=0pt,
+        left=10pt,
+        right=8pt,
+        top=8pt,
+        bottom=8pt,
+        width=0.96\linewidth,
+        before=\par\smallskip\hspace*{0.02\linewidth},
+        after=\par\smallskip,
+        borderline west={3pt}{0pt}{green!50!black}
+    ]
+        {\color{green!50!black}\faInfoCircle}\hspace{0.5em}\textbf{\large INFO}\\[0.4em]
+        #2\\
+        #1
+    \end{tcolorbox}
 }
 
 %---------------- Meta ----------------%

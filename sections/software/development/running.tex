@@ -33,11 +33,11 @@ To start the software, developers can run the following command in the terminal:
 \begin{verbatim}
     LoonE --start
 \end{verbatim}
-
-This command may also freeze the terminal and cause a temporary ~10 minute loss of connection to the ASV, but this is normal as the software is starting up and may take some time to initialize.
 This command will build and execute a docker container from configurations installed from the \href{https://github.com/HumberASV/Loon-Env}{custom script's install features}.
+
+\infobox{ The LoonE command is installed with the \textit{/install.bash} located in the repository, which is run as part of the setup process. This command is a custom script that simplifies the process of starting the software by automating the necessary steps to build and run the software in a Docker container.}
+\warningbox{ The LoonE command may also freeze the terminal and cause a temporary ~10 minute loss of connection to the ASV, but this is normal as the software is starting up and may take some time to build. It is not recommended to stop the process of building the container.}
 \footnote{A docker container either downloads the scripts or establishes a volume from the host which has the scripts.}
-It is not reccomended to stop the process of building the container.
 
 \warningbox{Changes in container will not be saved}
 
@@ -50,7 +50,7 @@ Follow the instructions below to enter the container:
 \end{verbatim}
 
 For our environment it is set to build ZedXWrapper from our \href{https://github.com/HumberASV/zed-ros2-wrapper}{main repository} instead of stereolabs' repository.
-This is because stereolabs' repository is actively maintained and may introduce breaking changes that can disrupt our development process.
+This is because Stereolabs' repository is actively maintained and may introduce breaking changes that can disrupt our development process.
 By building from our repository, we have more control over the software and can ensure that it remains stable and compatible with our system, allowing for a smoother development experience.
 Additionally, it makes it easier for us to set the configuration for the ZedX camera, which is crucial for our ASV's operations.
 
@@ -60,6 +60,8 @@ To run implemented features within the container, the current command is as foll
 \end{verbatim}
 
 This command will launch the ROS2 nodes---including Zedx-Wrapper---for the Loon-E ASV's communication system, allowing the ASV to send and receive data as part of its operations. See the launch file for more details on what processes are launched and how they are configured.
+
+\infobox{You can learn more about launch files in ROS \href{https://docs.ros.org/en/humble/Tutorials/Intermediate/Launch/Launch-Main.html}{here}.}
 
 \subsection{Troubleshooting}
 

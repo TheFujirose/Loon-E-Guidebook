@@ -1,0 +1,119 @@
+% Software Overview
+% MIT License
+%
+% Copyright (c) 2026 HumberASV
+% Copyright (c) 2026 Carson Fujita
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Base Station Specifications}
+The basestation is responsible for receiving data from the ASV for diagnostic monitoring and hosting the web client.
+
+It will host the following endpoints:
+
+\begin{description}
+    \item[\textit{/admin}] The admin webpage that allows technical users to manage secure tokens for user access, including creating, revoking, and expiring tokens as needed to maintain security.
+    \item[\textit{/admin/create\_token}] An endpoint for the admin webpage to create secure tokens for user access.
+    \item[\textit{/admin/revoke\_token}] An endpoint for the admin webpage to revoke secure tokens for user access.
+    \item[\textit{/admin/expire\_token}] An endpoint for the admin webpage to expire secure tokens for user access.
+    \item[\textit{/admin/tokens}] An endpoint for the admin webpage to get a list of all active tokens for user access.
+
+    \item[\textit{/client}] The web client application to access the streaming data with a valid token.
+    \item[\textit{/uh\_oh}] An endpoint to handle unauthorized access attempts and display an appropriate error message to users who do not have valid tokens or permissions to access the application.
+\end{description}
+
+Django Implementation may still prove useful, but discussion over use of Django or Flask still exists. The use of Docker is garanteed anyways.
+
+\subsection{User Classes and Characteristics}
+The primary users of the system are members of the following:
+
+\begin{description}
+    \item[Humber ASV Team] The Humber ASV team is responsible for developing, testing, and operating the Loon-E ASV. They will use the base station and web client to monitor the ASV's status and performance during development and testing, as well as during competitions. The team will also use the base station to receive data from the ASV for diagnostic purposes and to analyze the ASV's performance.
+    \item[Competition Judges] Judges at maritime robotics competitions such as RoboBoat and Njord will use the web client application to monitor the ASV's status and performance during competitions. They will evaluate the ASV's performance based on the data displayed on the web client, such as speed, heading, task completion, and other relevant metrics.
+    \item[Competing Teams] Other teams participating in maritime robotics competitions may also use the web client application to monitor their own ASVs if they are using a similar architecture, or to compare their performance with that of Loon-E. They may also use it to observe Loon-E's performance during competitions.
+    \item[Sponsors and Stakeholders] Sponsors and stakeholders of the Humber ASV team may also be interested in monitoring the ASV's performance during testing and competitions. They may use the web client application to view telemetry data and assess the progress of the project.
+\end{description}
+
+\subsection{User Needs and Considerations}
+These users will interact with the web client application to monitor the ASV's status and performance during operations. 
+The users may have varying levels of technical expertise, so the web client application will be designed to be user-friendly and accessible to a wide range of users which is also a Njord requirement. 
+The system will also need to accommodate multiple users accessing the web client application simultaneously, especially during competitions where multiple team members and judges may need to access the data at the same time. 
+The system is also used for diagnoistic purposes for both ISAAC Sim testing and real-life testing, so users may also include developers and testers who need to access the data for debugging and performance analysis. 
+Various Stakeholders and sponsors may wish to view the graphical interface during testing or competitions, so the web client application will be designed to be visually appealing and informative for a wide range of audiences.
+Since we aren't collecting data or allowing control of the ASV through the web client, competing teams and judges can have the same level of access; thus, there will be no differentiation in user roles or permissions for non-technical users.
+All non-technical users will have access to the same data and features within the application, ensuring a consistent experience regardless of their affiliation with Humber ASV. Technical users such as the Humber ASV team must have access to create secure keys to distribute to other users of the web client application; allowing access. 
+The focus of the user experience will be on providing clear and accessible information about the ASV's status and performance, rather than on differentiating access based on user roles or affiliations.
+
+\subsection{Operating Environment}
+The Base Station software will be designed to run on a Windows, Linux, or macOS computer that can connect to the ASV's access point. The web client application will be accessible through a web browser and will not require any additional software installation for user access. The system will need to be compatible with common web browsers such as Google Chrome, Mozilla Firefox, and Microsoft Edge to ensure accessibility for all users. The Base Station software will need to be able to run on a variety of hardware configurations, as the team may use different computers for development and testing. The system will also need to be designed to operate in environments with limited connectivity and potential interference, such as during maritime competitions where there may be multiple teams and devices operating in close proximity.
+Loon-E runs on a Jetson Orin with Ubuntu Jammy Jellyfish (22.04) and uses ROS Humble and Jetpack 5.0. A corresponding ROS node must be implemented to transmit data from the ASV to the Base Station. The Base Station and web client are isolated from the ROS enviroment and do not require compatibility considerations with it.
+
+\subsection{Functional Requirements}
+
+\subsubsection{Web Client Application}
+\begin{itemize}
+    \item FR-1: The web client application shall display the ASV's speed over ground in meters per second.
+    \item FR-2: The web client application shall display the ASV's heading.
+    \item FR-3: The web client application shall display the ASV's current task status.
+    \item FR-4: The web client application shall display the ASV's battery levels.
+    \item FR-5: The web client application shall display the ASV's task data.
+    \item FR-6: The web client application shall display a map showing the ASV's position and route.
+    \item FR-7: The web client application shall display the signal strength of the connection between the ASV and the Base Station.
+    \item FR-8: The web client application shall display a log from the ASV that includes relevant information about the ASV's operations and status.
+    \item FR-9: The web client application shall display a power and rudder panel that shows the power allocation in the propeller and the rudder angle.
+    \item FR-10: The web client application shall display received image recognition data from the ASV, such as object detection windows from the Zedx camera.
+    \item FR-11: The web client application shall display image recognition data as boxes overlaid on the video feed from the Zedx camera.
+    \item FR-12: The web client application shall be accessible through the latest (as of 2026) common web browsers and shall not require any additional software installation for user access.
+    \item FR-13: The web client application shall have a border color that indicates the ASV's status, such as autonomous, remote control, standby, out of control, or lost connection.
+    \item FR-14: The web client application shall use green border color to indicate autonomous mode.
+    \item FR-15: The web client application shall use blue border color to indicate remote control mode.
+    \item FR-16: The web client application shall use yellow border color to indicate standby mode.
+    \item FR-17: The web client application shall use red border color to indicate out of control status.
+    \item FR-18: The web client application shall use gray border color to indicate lost connection status.
+    \item FR-19: The web client application shall update the border color in real-time based on the ASV's status.
+    \item FR-20: The web client application shall have webpage with a text field that requires a valid token.
+    \item FR-21: The web client application shall require a valid token to access and view the streaming data.
+    \item FR-22: The web client application shall have an admin webpage that allows technical users to manage secure tokens for user access, including creating, revoking, and expiring tokens as needed to maintain security.
+\end{itemize}
+
+\subsubsection{Base Station Application}
+\begin{itemize}
+    \item FR-23: The Base Station application shall connect to the ASV using Cyclone DDS communication protocols.
+    \item FR-24: The Base Station application shall relay the received data through TCP from the ASV to the web client application for visualization and monitoring by users.
+    \item FR-25: The Base Station application shall handle the authentication and security of the connection with salt-based hashing and token management to ensure that only authorized users can access the data.
+    \item FR-26: The Base Station application shall host a website for the web client application.
+    \item FR-27: The Base Station application endpoints shall reject unauthorized access attempts and display an appropriate error message to users who do not have valid tokens or permissions to access the application.
+    \item FR-28: The Base Station shall use the endpoint \textit{/admin} for the admin webpage that allows technical users to create, revoke, or expire tokens as needed to maintain security.
+    \item FR-29: The Base Station shall use the endpoint \textit{/admin/create\_token} for the admin webpage to create secure tokens for user access.
+    \item FR-30: The Base Station shall use the endpoint \textit{/admin/revoke\_token} for the admin webpage to revoke secure tokens for user access.
+    \item FR-31: The Base Station shall use the endpoint \textit{/admin/expire\_token} for the admin webpage to expire secure tokens for user access.
+    \item FR-32: The Base Station shall use the endpoint \textit{/admin/tokens} for the admin webpage to get a list of all active tokens for user access.
+    \item FR-33: The Base Station shall use the endpoint \textit{/client} for the web client application to access the streaming data with a valid token.
+    \item FR-34: The Base Station shall use the endpoint \textit{/uh\_oh} to handle unauthorized access attempts and display an appropriate error message to users who do not have valid tokens or permissions to access the application.
+    \item FR-35: The Base Station shall allow technical users to create a admin user account through terminal commands.
+    \item FR-36: The Base Station application shall allow the admin user to create, revoke, or expire tokens as needed to maintain security.
+\end{itemize}
+
+\subsubsection{ASV}
+\begin{itemize}
+    \item FR-37: The ASV shall collect data from various sensors and systems on the ASV, such as telemetry data, sensor readings, and video feeds from the Zedx camera.
+    \item FR-38: The ASV shall transmit the collected data to the Base Station application using Cyclone DDS communication protocols.
+\end{itemize}
+
+\newpage % Start a new page for the next section
