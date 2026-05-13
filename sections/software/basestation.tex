@@ -23,6 +23,7 @@
 % SOFTWARE.
 
 \section{Base Station}
+\label{sec:basestation}
 The Base Station is a critical component of the Loon-E ASV's software system, responsible for receiving data from the ASV and providing it to users on a web client application. It acts as an intermediary between the ASV and the users, allowing for remote access to the ASV's data and operations.
 
 
@@ -50,6 +51,7 @@ Using CycloneDDS as the data distribution service, the base station will subscri
 
 
 \subsubsection{Previous Implementation}
+\label{sec:basestation-previous-implementation}
 Previous implementation of the basestation used MQTT and Django running through containers to receive data from the ASV and serve it to the web client application. However, this approach was found to be less efficient and more complex than using ROS2's built-in communication capabilities with CycloneDDS. By using ROS2 and CycloneDDS, we can simplify the architecture of the base station and improve the performance of data transmission between the Base Station and the ASV.
 Additionally, we had difficulty with RTP streaming of the Zedx camera feed due to problems with the Zedxros2Wrapper's streaming capabilities.\footnote{As of the time of writing, the Zedxros2Wrapper's streaming capabilities are not fully functional, see \href{https://github.com/stereolabs/zed-ros2-wrapper/issues/289}{this issue} for more details.} 
 
@@ -66,7 +68,7 @@ The web client application will display telemetry data in a user-friendly interf
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{./images/gui.png}
+    \includegraphics[width=0.8\textwidth]{./images/GUI/gui.png}
     \caption{Web Client Application GUI Mockup}
     \label{fig:gui}
 \end{figure}
