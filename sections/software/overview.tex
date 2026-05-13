@@ -23,6 +23,7 @@
 % SOFTWARE.
 
 \section{Software System}
+\label{sec:software-overview}
 The software system of the Loon-E ASV is responsible for controlling the vehicle's operations, including navigation, sensor data processing, and communication.
 The entire system can be illustrated in Figure \ref{fig:dfd1}, which illustrates a 3 process system consisting of a base station, the primary computer, and a web client. These 3 components work together to realize the software system of the ASV. 
 
@@ -35,6 +36,7 @@ The entire system can be illustrated in Figure \ref{fig:dfd1}, which illustrates
 
 The Loon-E ASV system sends a variety of data which need to be remotely accessed and visualized by users. 
 This data must be transmitted from the ASV to the Base Station, which will then be accessed by users through a web client application.
+This data is visualized by our \hyperref[itm:dfd]{Data Flow Diagram (DFD)} in Figure \ref{fig:dfd1}.
 
 \newpage % prevent the table below from being separated from the footnote
 \subsection{Primary Computer}
@@ -90,11 +92,14 @@ Additionally, for testing purposes, we set up a ROS2 subscriber node on a second
 
 Figure \ref{fig:software-architecture} demonstrates the hardware which processes (nodes) run on, and the data flow between both hardware and software components.
 
+
 The web client provides a user interface for monitoring the ASV remotely.
 The base station is responsible for receiving data from the ASV for diagnostic monitoring and hosting the web client.
 \include{sections/software/basestation.tex}
+\include{sections/software/basestation/gui.tex}
 \include{sections/software/basestation/specifications.tex}
 \include{sections/software/development.tex}
+\include{sections/software/basestation/development.tex}
 \include{sections/software/development/setup.tex}
 \include{sections/software/development/remote.tex}
 \include{sections/software/development/running.tex}
