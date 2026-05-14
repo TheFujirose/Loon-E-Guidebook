@@ -22,7 +22,10 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 
-\section{Base Station}
+% Basic Overview of basestation and web client application
+% For both technical and non-technical
+
+\subsection{Base Station}
 \label{sec:basestation}
 The Base Station is a critical component of the Loon-E ASV's software system, responsible for receiving data from the ASV and providing it to users on a web client application. It acts as an intermediary between the ASV and the users, allowing for remote access to the ASV's data and operations.
 
@@ -53,14 +56,17 @@ Using CycloneDDS as the data distribution service, the base station will subscri
 \subsubsection{Previous Implementation}
 \label{sec:basestation-previous-implementation}
 Previous implementation of the basestation used MQTT and Django running through containers to receive data from the ASV and serve it to the web client application. However, this approach was found to be less efficient and more complex than using ROS2's built-in communication capabilities with CycloneDDS. By using ROS2 and CycloneDDS, we can simplify the architecture of the base station and improve the performance of data transmission between the Base Station and the ASV.
-Additionally, we had difficulty with RTP streaming of the Zedx camera feed due to problems with the Zedxros2Wrapper's streaming capabilities.\footnote{As of the time of writing, the Zedxros2Wrapper's streaming capabilities are not fully functional, see \href{https://github.com/stereolabs/zed-ros2-wrapper/issues/289}{this issue} for more details.} 
+Additionally, we had difficulty with RTP streaming of a misunderstanding with the Zedx camera feed due to problems with the ROS 2 Zed Wrapper's streaming.
+
+Turns out the ROS 2 Zed Wrapper streaming capabilities are for streaming to ROS 2 topics, not for streaming video feeds over RTP as we had initially thought\autocite{STEREOLABFORUMQUESTION}.
+This led to complications in our previous implementation, as we had designed the architecture around the assumption that the Zedx camera feed could be streamed over RTP to the base station.
 
 New addition will build on these lessons through the following changes to the architecture:
 \begin{description}
     \item[ROS2 with CycloneDDS] Using ROS2's built-in communication capabilities with CycloneDDS allows for more efficient and streamlined data transmission between the ASV and the base station, eliminating the need for additional middleware like MQTT.
     \item[Web Client Application] The web client will be simplified to Flask to reduce technical complexity.
     \item[MQTT Removal] MQTT will be removed from the architecture to simplify the communication between the ASV and the base station, as ROS2 with CycloneDDS can handle all necessary data transmission without the need for additional middleware.
-    \item[RTP Streaming Removal] The RTP streaming of the Zedx camera feed will be removed due to the current limitations of the Zedxros2Wrapper's streaming capabilities, and instead, we will explore alternative methods for transmitting camera data from the ASV to the base station.
+    \item[RTP Streaming Removal] The RTP streaming of the Zedx camera feed will be removed due to the current limitations of the ROS 2 Zed Wrapper's streaming capabilities, and instead, we will explore alternative methods for transmitting camera data from the ASV to the base station.
 \end{description}
 
 \subsection{Web Client Application}
@@ -94,7 +100,8 @@ Log from the Loon-E.
 	\item[I] Power and Rudder Panel \\
 Sideby side power bars detailing the power allocation in the propoller. 
 	\item[J] Recieved Image Recognition \\
-Object Detection windows from the Loon-E.\footnote{To reduce processing load the ASV will only send the video feed, and locations of detected  objects, the Base Station will be responsible for combining the two sources into one video feed and sending the results to the web client application for display.}
+Object Detection windows from the Loon-E.
+\footnote{To reduce processing load the ASV will only send the video feed, and locations of detected  objects, the Base Station will be responsible for combining the two sources into one video feed and sending the results to the web client application for display.}
 \end{description}
 
 The web client application will be accessible through a web browser and will not require any additional software installation for user access; however, the use of React for dynamic content and interactive features may require users to have a modern web browser that supports React applications. 

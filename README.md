@@ -1,5 +1,9 @@
 # Loon-E Guidebook
 
+> ![Important](https://img.shields.io/badge/Important-Read%20Before%20Editing-orange) ![License](https://img.shields.io/badge/License-MIT-green) ![Last%20Updated](https://img.shields.io/badge/Last%20Updated-2026--05--14-blue)
+>
+> Latest releases are found and downloaded: [here](https://github.com/TheFujirose/Loon-E-Guidebook/releases).
+
 This repository contains the LaTeX source for the Loon-E ASV guidebook maintained by HumberASV. The document covers the vehicle overview, software architecture, development workflow, glossary, and supporting references for the project.
 
 ## Overview
