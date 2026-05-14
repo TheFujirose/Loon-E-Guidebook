@@ -1,0 +1,91 @@
+% Software Overview
+% MIT License
+%
+% Copyright (c) 2026 HumberASV
+% Copyright (c) 2026 Carson Fujita
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{GUI}
+
+The GUI component is the visual component of the \hyperref[sec:software-overview]{Loon-E system}.
+It is responsible for representing the data visually, as shown in Figure \ref{fig:gui}, and it must match the Njord GUI competition requirements \autocite{NJORDGUI}.
+The GUI is implemented as an application in a \hyperref[itm:webclient]{web client}. It communicates with the \hyperref[sec:basestation]{base station} to receive data from the ASV and display it to users.
+
+\subsection{User Classes and Characteristics}
+The primary users of the system are members of the following:
+
+\begin{description}
+    \item[Humber ASV Team] The Humber ASV team is responsible for developing, testing, and operating the Loon-E ASV. They will use the base station and web client to monitor the ASV's status and performance during development and testing, as well as during competitions. The team will also use the base station to receive data from the ASV for diagnostic purposes and to analyze the ASV's performance.
+    \item[Competition Judges] Judges at maritime robotics competitions such as RoboBoat and Njord will use the web client application to monitor the ASV's status and performance during competitions. They will evaluate the ASV's performance based on the data displayed on the web client, such as speed, heading, task completion, and other relevant metrics.
+    \item[Competing Teams] Other teams participating in maritime robotics competitions may also use the web client application to monitor their own ASVs if they are using a similar architecture, or to compare their performance with that of Loon-E. They may also use it to observe Loon-E's performance during competitions.
+    \item[Sponsors and Stakeholders] Sponsors and stakeholders of the Humber ASV team may also be interested in monitoring the ASV's performance during testing and competitions. They may use the web client application to view telemetry data and assess the progress of the project.
+\end{description}
+
+\subsubsection{User Needs and Considerations}
+\label{sec:basestation-user-needs}
+
+These users interact with the web client application to monitor the ASV's status and performance during operations.
+
+The design must address the following user needs:
+\begin{itemize}
+    \item Support users with varying levels of technical expertise.
+    \item Remain user-friendly and accessible, as required by Njord \autocite{NJORDGUI}.
+    \item Accommodate multiple simultaneous users, especially during competitions.
+    \item Support diagnostic use in both ISAAC Sim and real-life testing for developers and testers.
+    \item Present information in a visually appealing and informative way for sponsors and other stakeholders.
+\end{itemize}
+
+The web client does not allow control of the ASV, so non-technical users can share the same level of access without role-based differentiation.
+All non-technical users can view the same data and features, regardless of affiliation with Humber ASV.
+Technical users, such as the Humber ASV team, require access to create and manage secure tokens for user access; this can be done through the admin webpage of the web client application, which is accessible to technical users with valid credentials.
+The admin webpage allows technical users to create, revoke, and expire tokens as needed to maintain security and control access to the application.
+\notebox{the data and features available on the web client application are the same for all users, regardless of their role or affiliation with Humber ASV.}
+The user experience focuses on clear, accessible ASV status and performance information rather than role-specific interfaces.
+
+\subsection{Functional Requirements}
+
+\subsubsection{Web Client Application}
+\begin{itemize}
+    \item FR-1: The web client application shall display the ASV's speed over ground in meters per second.
+    \item FR-2: The web client application shall display the ASV's heading.
+    \item FR-3: The web client application shall display the ASV's current task status.
+    \item FR-4: The web client application shall display the ASV's battery levels.
+    \item FR-5: The web client application shall display the ASV's task data.
+    \item FR-6: The web client application shall display a map showing the ASV's position and route.
+    \item FR-7: The web client application shall display the signal strength of the connection between the ASV and the Base Station.
+    \item FR-8: The web client application shall display a log from the ASV that includes relevant information about the ASV's operations and status.
+    \item FR-9: The web client application shall display a power and rudder panel that shows the power allocation in the propeller and the rudder angle.
+    \item FR-10: The web client application shall display received image recognition data from the ASV, such as object detection windows from the Zedx camera.
+    \item FR-11: The web client application shall display image recognition data as boxes overlaid on the video feed from the Zedx camera.
+    \item FR-12: The web client application shall be accessible through the latest (as of 2026) common web browsers and shall not require any additional software installation for user access.
+    \item FR-13: The web client application shall have a border color that indicates the ASV's status, such as autonomous, remote control, standby, out of control, or lost connection.
+    \item FR-14: The web client application shall use green border color to indicate autonomous mode.
+    \item FR-15: The web client application shall use blue border color to indicate remote control mode.
+    \item FR-16: The web client application shall use yellow border color to indicate standby mode.
+    \item FR-17: The web client application shall use red border color to indicate out of control status.
+    \item FR-18: The web client application shall use gray border color to indicate lost connection status.
+    \item FR-19: The web client application shall update the border color in real-time based on the ASV's status.
+    \item FR-20: The web client application shall have webpage with a text field that requires a valid token.
+    \item FR-21: The web client application shall require a valid token to access and view the streaming data.
+    \label{itm:fr-webclient-token}
+    \item FR-22: The web client application shall have an admin webpage that allows technical users to manage secure tokens for user access, including creating, revoking, and expiring tokens as needed to maintain security.
+    \label{itm:fr-webclient-admin}
+\end{itemize}
+
