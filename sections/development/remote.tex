@@ -24,7 +24,7 @@
 
 % This remote connections for Loon-E ASV
 % This is separated from the development section as this may change more frequently.
-\section{Remote Connections}
+\subsection{Remote Connections}
 \label{sec:remote-connections}
 
 Local development is done on the ASV's primary computer, which is a Jetson Orin.
@@ -36,7 +36,7 @@ have set up a secure VPN connection to the ASV's primary computer, allowing deve
 This VPN connection ensures that developers can securely access the ASV's primary computer from anywhere, enabling them to monitor the ASV's operations, access logs, and perform development tasks without needing to be physically present at the ASV's location.
 At cost, local development on a small device is not scalable for larger teams, fortunately, our software team is relatively small and the VPN connection provides a convenient solution for remote access to the ASV's primary computer.
 
-\subsection{TailScale Connection}
+\subsubsection{TailScale Connection}
 To connect to the ASV's primary computer using TailScale, developers need to follow these steps:
 
 \begin{enumerate}
@@ -49,7 +49,7 @@ To connect to the ASV's primary computer using TailScale, developers need to fol
     \item Once connected, developers can access the ASV's primary computer as if they were on the same local network, allowing them to monitor and develop the software remotely.
 \end{enumerate}
 
-\subsection{RustDesk Connection}
+\subsubsection{RustDesk Connection}
 
 In addition to the TailScale VPN connection, developers can also use RustDesk for remote desktop access to the ASV's primary computer.
 RustDesk is an open-source remote desktop software that allows users to access and control a computer remotely.

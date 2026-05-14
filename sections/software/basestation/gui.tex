@@ -22,13 +22,14 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 
-\section{GUI}
+% Non technical overview of the GUI
+\subsection{GUI}
 
 The GUI component is the visual component of the \hyperref[sec:software-overview]{Loon-E system}.
 It is responsible for representing the data visually, as shown in Figure \ref{fig:gui}, and it must match the Njord GUI competition requirements \autocite{NJORDGUI}.
 The GUI is implemented as an application in a \hyperref[itm:webclient]{web client}. It communicates with the \hyperref[sec:basestation]{base station} to receive data from the ASV and display it to users.
 
-\subsection{User Classes and Characteristics}
+\subsubsection{User Classes and Characteristics}
 The primary users of the system are members of the following:
 
 \begin{description}
@@ -58,34 +59,3 @@ Technical users, such as the Humber ASV team, require access to create and manag
 The admin webpage allows technical users to create, revoke, and expire tokens as needed to maintain security and control access to the application.
 \notebox{the data and features available on the web client application are the same for all users, regardless of their role or affiliation with Humber ASV.}
 The user experience focuses on clear, accessible ASV status and performance information rather than role-specific interfaces.
-
-\subsection{Functional Requirements}
-
-\subsubsection{Web Client Application}
-\begin{itemize}
-    \item FR-1: The web client application shall display the ASV's speed over ground in meters per second.
-    \item FR-2: The web client application shall display the ASV's heading.
-    \item FR-3: The web client application shall display the ASV's current task status.
-    \item FR-4: The web client application shall display the ASV's battery levels.
-    \item FR-5: The web client application shall display the ASV's task data.
-    \item FR-6: The web client application shall display a map showing the ASV's position and route.
-    \item FR-7: The web client application shall display the signal strength of the connection between the ASV and the Base Station.
-    \item FR-8: The web client application shall display a log from the ASV that includes relevant information about the ASV's operations and status.
-    \item FR-9: The web client application shall display a power and rudder panel that shows the power allocation in the propeller and the rudder angle.
-    \item FR-10: The web client application shall display received image recognition data from the ASV, such as object detection windows from the Zedx camera.
-    \item FR-11: The web client application shall display image recognition data as boxes overlaid on the video feed from the Zedx camera.
-    \item FR-12: The web client application shall be accessible through the latest (as of 2026) common web browsers and shall not require any additional software installation for user access.
-    \item FR-13: The web client application shall have a border color that indicates the ASV's status, such as autonomous, remote control, standby, out of control, or lost connection.
-    \item FR-14: The web client application shall use green border color to indicate autonomous mode.
-    \item FR-15: The web client application shall use blue border color to indicate remote control mode.
-    \item FR-16: The web client application shall use yellow border color to indicate standby mode.
-    \item FR-17: The web client application shall use red border color to indicate out of control status.
-    \item FR-18: The web client application shall use gray border color to indicate lost connection status.
-    \item FR-19: The web client application shall update the border color in real-time based on the ASV's status.
-    \item FR-20: The web client application shall have webpage with a text field that requires a valid token.
-    \item FR-21: The web client application shall require a valid token to access and view the streaming data.
-    \label{itm:fr-webclient-token}
-    \item FR-22: The web client application shall have an admin webpage that allows technical users to manage secure tokens for user access, including creating, revoking, and expiring tokens as needed to maintain security.
-    \label{itm:fr-webclient-admin}
-\end{itemize}
-
