@@ -1,0 +1,181 @@
+% Software Overview
+% MIT License
+%
+% Copyright (c) 2026 HumberASV
+% Copyright (c) 2026 Carson Fujita
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\subsection{Loon Env}
+\label{sec:loon-env}
+
+Loon-Env is the development environment for the Loon-E ASV project.
+
+Clone it with submodules from GitHub:
+
+\begin{verbatim}
+    git clone --recurse-submodules https://github.com/HumberASV/Loon-Env.git
+\end{verbatim}
+
+
+The repository provides several scripts:
+
+\begin{enumerate}
+ \item \texttt{LoonEnv}: installation and update script.
+ \item \texttt{LoonE}: wrapper command for building, starting, and entering containers.
+ \item \texttt{LoonTools}: diagnostics and build helper commands.
+ \item \texttt{configMTU}: script for MTU configuration related to ZEDX networking.
+\end{enumerate}
+
+\subsubsection{LoonEnv Command}
+
+\texttt{LoonEnv} installs dependencies, sets environment variables, installs tools/assets, and prepares ROS 2 workspaces \autocite{LOONENV}.
+
+Common usage patterns from the project workflow are:
+
+\begin{verbatim}
+    ./LoonEnv -v -s
+\end{verbatim}
+
+Installs or updates scripts and smaller assets (for example: \texttt{LoonTools}, \texttt{LoonE}, and config files).
+
+\begin{verbatim}
+    ./LoonEnv -v -f docker -s
+\end{verbatim}
+
+Restricts updates to Docker-related components.
+
+\begin{verbatim}
+    ./LoonEnv -v
+\end{verbatim}
+
+Runs the full installer, including MTU configuration and workspace setup.
+
+\begin{verbatim}
+    ./LoonEnv --dry-run
+\end{verbatim}
+
+Previews commands without applying changes.
+
+\subsubsection{LoonE Command}
+
+\texttt{LoonE} is the operator-facing command installed by Loon-Env for launching and interacting with the Docker-based Loon-E environment \autocite{LOONENV}.
+
+The setup concepts from Section \ref{sec:docker-setup} and Section \ref{sec:env-vars-setup} are abstracted behind \texttt{LoonE} to provide a simpler interface for developers.
+
+To view the available options:
+
+\begin{verbatim}
+    LoonE --help
+\end{verbatim}
+
+\subsubsection{What It Does}
+\warningbox{LoonE wraps Docker and Docker Compose operations. Ensure Docker is installed and available in your terminal before using LoonE.}
+
+\begin{itemize}
+ \item Builds containers using hardware or virtual ZEDX profiles.
+ \item Starts or enters specific services (for example, \texttt{zed} and \texttt{loone}).
+ \item Uses installed assets and environment settings configured by \texttt{LoonEnv}.
+\end{itemize}
+
+Typical examples are:
+
+\begin{verbatim}
+    LoonE -b --virtual zed
+    LoonE -b --hardware zed
+    LoonE -b loone
+    LoonE -s loone
+    LoonE -e loone
+\end{verbatim}
+
+\subsubsection{Building with LoonE}
+
+Use \texttt{-b} to build services:
+
+\begin{verbatim}
+    LoonE -b loone
+\end{verbatim}
+
+For ZED builds, select the profile explicitly:
+
+\begin{verbatim}
+    LoonE -b --virtual zed
+    LoonE -b --hardware zed
+\end{verbatim}
+
+\subsubsection{Running with LoonE}
+
+Start services with \texttt{-s}:
+
+\begin{verbatim}
+    LoonE -s loone
+\end{verbatim}
+
+Depending on local setup, developers may start one or more services as needed.
+
+\subsubsection{Entering Containers}
+
+Enter a running service container with \texttt{-e}:
+
+\begin{verbatim}
+    LoonE -e loone
+\end{verbatim}
+
+You can also use Docker directly when needed:
+
+\begin{verbatim}
+    docker ps
+    docker exec -it loone bash
+\end{verbatim}
+
+\warningbox{The ZED container is intended for normal development as the non-root user. Use \texttt{sudo} only for maintenance tasks such as package refresh or dependency installation.}
+
+\subsubsection{LoonTools Command}
+
+\texttt{LoonTools} provides diagnostics and helper workflows.
+
+Common options include:
+
+\begin{verbatim}
+    LoonTools --doctor
+    LoonTools --colcon
+    LoonTools --dry-run
+    LoonTools --help
+\end{verbatim}
+
+\notebox{When \texttt{--colcon} is run in the ZED container, ROS setup is sourced in the same shell and the build runs as the normal container user.}
+
+\subsubsection{configMTU Command}
+
+\texttt{configMTU} configures MTU settings for network interfaces used by LoonE containers. This is important for reliable host-container communication with high-throughput ZEDX camera data.
+
+\subsubsection{Environment Variables Installed by LoonEnv}
+
+The LoonEnv setup configures standard variables such as:
+
+\begin{itemize}
+ \item \texttt{LOONE\_FILES\_DIR}: installation location for Loon-Env files (default: \texttt{/opt/loon\_env}).
+ \item \texttt{LOONE\_WORKSPACE\_DIR}: ROS 2 workspace root (default: \texttt{\$HOME/LoonE\_ws}).
+ \item \texttt{LOONE\_SETUP\_SCRIPT}: setup script path (default: \texttt{\$HOME/.loon\_env\_setup.bash}).
+ \item \texttt{ROS\_DISTRO}: ROS distribution (default: \texttt{humble}).
+ \item \texttt{RMW\_IMPLEMENTATION}: DDS implementation (default: \texttt{rmw\_cyclonedds\_cpp}).
+\end{itemize}
+
+
+\notebox{The generated ROS workspaces are mounted read-write, so normal development artifacts (for example, \texttt{colcon} build output) persist in the workspace.}
