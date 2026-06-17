@@ -24,8 +24,8 @@
 \subsection{ROS2 Design}
 
 We are currently undergoing changes to our ROS2 Architecture to better fit our needs and constraints.
-The current architecture consists of 7 nodes: Control, Map, Movement, Planning, Base Station, ROS2 Publish Clock, and Zedx Camera. The data distribution between these nodes is illustrated in Table \ref{tab:current-ros2-nodes}.
-The proposed architecture consists of 8 nodes: Control, Map, Movement, Base Station, ROS2 Publish Clock, Bound\_Box\_Video, and Zedx Camera. The data distribution between these nodes is illustrated in Table \ref{tab:proposed-ros2-nodes}.
+The current architecture consists of 7 nodes: \texttt{Control}, \texttt{Map}, \texttt{Movement}, \texttt{Planning}, \texttt{Base Station}, \texttt{ROS2 Publish Clock}, and \texttt{Zedx Camera}. The data distribution between these nodes is illustrated in Table \ref{tab:current-ros2-nodes}.
+The proposed architecture consists of 8 nodes: \texttt{Control}, \texttt{Map}, \texttt{Movement}, \texttt{Planning}, \texttt{Base Station}, \texttt{ROS2 Publish Clock}, \texttt{Bound\_Box\_Video}, and \texttt{Zedx Camera}. The data distribution between these nodes is illustrated in Table \ref{tab:proposed-ros2-nodes}.
 
 \begin{table}[H]
     \centering
@@ -45,6 +45,14 @@ The proposed architecture consists of 8 nodes: Control, Map, Movement, Base Stat
     \caption{Primary Computer ROS2 Nodes}
     \label{tab:ros2-nodes-overview}
 \end{table}
+
+% TODO: Add images/dfd_primary_computer.png to the images folder
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/dfd_primary_computer.png}
+%     \caption{Level 1.1 Data Flow Diagram for the Primary Computer (Ref: Technical Report Appendix A)}
+%     \label{fig:dfd-primary}
+% \end{figure}
 
 \begin{table}[H]
     \centering
@@ -74,9 +82,10 @@ The proposed architecture consists of 8 nodes: Control, Map, Movement, Base Stat
         \hline
         \textbf{Node Name} & \textbf{Subscriptions} & \textbf{Publications} \\
         \hline
-        Control & map (local), map (global), objects & twist, status\\
-        Map & pose, odom, objects\footnotemark & map (local) \\
+        Control & path, status & twist \\
+        Map & pose, odom, objects\footnotemark & map (local), map (global) \\
         Movement Node & twist, status & health (movement), power \\
+        Planning & map (local), map (global), destination & path \\
         Base Station & ALL & None \\
         ROS2 Publish Clock & None & clock \\
         Zedx Camera & clock & objects, pose, image\_rect\_color, map (global) \\
@@ -88,27 +97,20 @@ The proposed architecture consists of 8 nodes: Control, Map, Movement, Base Stat
 \end{table}
 \footnotetext{Zedx Objects contains location and classification data \autocite{STEREOLABSOBJ}.}
 
-% \begin{table}[H]
-%     \centering
-%     \begin{tabular}{|c|c|}
-%         \hline
-%         \textbf{Node} & \textbf{Type} \\
-%         \hline
-%         \hline
-%     \end{tabular}
-%     \caption{Current ROS2 Topics}
-%     \label{tab:ros2-topics}
-% \end{table}
-
-% \begin{table}[H]
-%     \centering
-%     \begin{tabular}{|c|c|}
-%         \hline
-%         \textbf{Topic Name} & \textbf{Message Type} \\
-%         \hline
-%         \hline
-%     \end{tabular}
-%     \caption{Current ROS2 Topics}
-%     \label{tab:ros2-topics}
-% \end{table}
-
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Topic Name} & \textbf{Message Type} \\
+        \hline
+        /clock & rosgraph\_msgs/msg/Clock \\
+        /cmd\_vel & geometry\_msgs/msg/Twist \\
+        /map/local & nav\_msgs/msg/OccupancyGrid \\
+        /zed/objects & vision\_msgs/msg/Detection3DArray \\
+        /gps/fix & sensor\_msgs/msg/NavSatFix \\
+        /video\_feed & sensor\_msgs/msg/Image \\
+        \hline
+    \end{tabular}
+    \caption{Common ROS2 Topics and Message Types}
+    \label{tab:ros2-topics}
+\end{table}

@@ -33,7 +33,15 @@ To start the software, developers can run the following command in the terminal:
 \begin{verbatim}
     LoonE -s loone
 \end{verbatim}
-This command starts the \texttt{loone} service container using the configuration installed by \href{https://github.com/HumberASV/Loon-Env}{Loon-Env}. If images are not built yet, run \texttt{LoonE -b loone} first.
+This command starts the \texttt{loone} service container using the configuration installed by \href{https://github.com/HumberASV/Loon-Env}{Loon-Env}. 
+
+If images are not built yet, you must build them specifying a profile (\texttt{--virtual} or \texttt{--hardware}):
+
+\begin{verbatim}
+    LoonE -b --virtual loone
+    # OR
+    LoonE -b --hardware loone
+\end{verbatim}
 
 \infobox{The LoonE command is installed by \textit{LoonEnv} as part of setup. It simplifies container lifecycle operations such as build (\texttt{-b}), start (\texttt{-s}), and enter (\texttt{-e}).}
 \warningbox{ The colcon build command on zed services may also freeze the terminal and cause a temporary ~10 minute loss of connection to the ASV, but this is normal as the software is starting up and may take some time to build. It is not recommended to stop the process of building the container.}
@@ -49,6 +57,13 @@ Follow the instructions below to enter the container:
     # or use Docker directly:
     docker ps
     docker exec -it <container_id_or_name> /bin/bash
+\end{verbatim}
+
+\subsubsection{Building within the Container}
+While inside a container, you should use \texttt{LoonTools} to handle the ROS 2 build process. This ensures dependencies are checked and the environment is sourced correctly.
+
+\begin{verbatim}
+    LoonTools --colcon loone
 \end{verbatim}
 
 For our environment it is set to build ZedXWrapper from our \href{https://github.com/HumberASV/zed-ros2-wrapper}{main repository} instead of stereolabs' repository.
@@ -70,11 +85,25 @@ This command will launch the ROS2 nodes---including Zedx-Wrapper---for the Loon-
 \notebox{For most issues, you may benefit from reading Section \ref{sec:docker-setup} or \ref{sec:colcon-setup} to ensure your environment is set up correctly.}
 If you encounter issues while running the software, here are some common troubleshooting steps:
 
+\subsubsection{General Health and Diagnostics}
+Before troubleshooting specific components, check the overall environment health:
+
+\begin{itemize}
+    \item \textbf{Container Status}: Run \texttt{LoonE --health} to see which services are built and running.
+    \item \textbf{System Audit}: Run \texttt{LoonTools --doctor} to check for missing dependencies, incorrect environment variables, or networking issues.
+    \item \textbf{Network Check}: Run \texttt{LoonTools --mtu} to ensure your physical interfaces are configured for Jumbo Frames (MTU 9000), which is required for ZEDX.
+\end{itemize}
+
 \subsubsection{Camera not connecting}
 If the ZedX camera is not connecting or functioning properly, try the following steps:
     \begin{itemize}
         \item Ensure that the ZedX camera is properly connected to the primary computer and powered on.
         \item Check the camera's physical connection and power status, and ensure that it is securely plugged in.
+        \item Verify that Jumbo Frames are enabled on the host:
+            \begin{verbatim}
+                LoonTools --mtu
+            \end{verbatim}
+            If they are not, run \texttt{sudo configMTU} to fix the interface settings.
         \item Verify that the necessary drivers and software for the ZedX camera are installed and up to date \\
             \begin{verbatim}
                 apt list --installed | grep zed

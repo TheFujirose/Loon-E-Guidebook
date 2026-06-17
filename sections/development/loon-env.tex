@@ -45,15 +45,21 @@ The repository provides several scripts:
 
 \subsubsection{LoonEnv Command}
 
-\texttt{LoonEnv} installs dependencies, sets environment variables, installs tools/assets, and prepares ROS 2 workspaces \autocite{LOONENV}.
+\texttt{LoonEnv} automates the setup and maintenance of the development environment. It installs system dependencies, manages environment variables, deploys project-specific tools, applies network buffer optimizations, and prepares ROS 2 workspaces \autocite{LOONENV}.
 
 Common usage patterns from the project workflow are:
+
+\begin{verbatim}
+    ./LoonEnv -i
+\end{verbatim}
+
+Full installation: installs required dependencies (Docker, ROS 2, ZED SDK), configures the system, and sets up workspaces.
 
 \begin{verbatim}
     ./LoonEnv -v -s
 \end{verbatim}
 
-Installs or updates scripts and smaller assets (for example: \texttt{LoonTools}, \texttt{LoonE}, and config files).
+Updates scripts and smaller assets (for example: \texttt{LoonTools}, \texttt{LoonE}, and configuration files) without a full re-install.
 
 \begin{verbatim}
     ./LoonEnv -v -f docker -s
@@ -75,14 +81,20 @@ Previews commands without applying changes.
 
 \subsubsection{LoonE Command}
 
-\texttt{LoonE} is the operator-facing command installed by Loon-Env for launching and interacting with the Docker-based Loon-E environment \autocite{LOONENV}.
+\texttt{LoonE} is the primary interface for managing the Docker-based Loon-E environment. It abstracts complex Docker and Docker Compose operations into a set of simple commands \autocite{LOONENV}.
 
 The setup concepts from Section \ref{sec:docker-setup} and Section \ref{sec:env-vars-setup} are abstracted behind \texttt{LoonE} to provide a simpler interface for developers.
 
-To view the available options:
+Common options include:
 
 \begin{verbatim}
     LoonE --help
+    LoonE --health
+    LoonE --faq
+\end{verbatim}
+
+\begin{verbatim}
+    LoonE --purge
 \end{verbatim}
 
 \subsubsection{What It Does}
@@ -148,22 +160,22 @@ You can also use Docker directly when needed:
 
 \subsubsection{LoonTools Command}
 
-\texttt{LoonTools} provides diagnostics and helper workflows.
+\texttt{LoonTools} is a collection of utility functions for monitoring and building the Loon-Env project components.
 
 Common options include:
 
 \begin{verbatim}
     LoonTools --doctor
+    LoonTools --mtu
     LoonTools --colcon
     LoonTools --dry-run
-    LoonTools --help
 \end{verbatim}
 
 \notebox{When \texttt{--colcon} is run in the ZED container, ROS setup is sourced in the same shell and the build runs as the normal container user.}
 
 \subsubsection{configMTU Command}
 
-\texttt{configMTU} configures MTU settings for network interfaces used by LoonE containers. This is important for reliable host-container communication with high-throughput ZEDX camera data.
+\texttt{configMTU} configures MTU settings for network interfaces to support Jumbo Frames. This is required for high-throughput ZEDX camera data streams. The tool allows for temporary (current session) or permanent (via Netplan) configuration.
 
 \subsubsection{Environment Variables Installed by LoonEnv}
 
@@ -175,6 +187,8 @@ The LoonEnv setup configures standard variables such as:
  \item \texttt{LOONE\_SETUP\_SCRIPT}: setup script path (default: \texttt{\$HOME/.loon\_env\_setup.bash}).
  \item \texttt{ROS\_DISTRO}: ROS distribution (default: \texttt{humble}).
  \item \texttt{RMW\_IMPLEMENTATION}: DDS implementation (default: \texttt{rmw\_cyclonedds\_cpp}).
+ \item \texttt{L4T\_VERSION}: Detected Linux for Tegra version.
+ \item \texttt{CYCLONEDDS\_URI}: Path to the CycloneDDS configuration file.
 \end{itemize}
 
 

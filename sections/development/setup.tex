@@ -31,7 +31,7 @@ This can be particularly useful for ROS 2 development, as it can help ensure tha
 
 \warningbox{It is prerequisite to have an understanding of Linux systems before using Docker.}
 
-\notebox{This document assumes you have already set up your environment variables as described in the Section \ref{sec:env-vars-setup} and that you have installed Docker. If you have not done so, please refer to that documentation before proceeding.}
+\notebox{This document explains the underlying configuration required for the project. For most developers, the \texttt{LoonEnv} tool (Section \ref{sec:loon-env}) automates this setup, including Docker installation and network optimization.}
 
 \bigskip
 \subsubsection{Images}
@@ -258,11 +258,13 @@ Begin by sourcing the ROS 2 setup file and setting the necessary environment var
 \begin{verbatim}
 source /opt/ros/humble/setup.bash
 export ROS_DOMAIN_ID=0
-export ROS_LOCALHOST_ONLY=1
+export ROS_LOCALHOST_ONLY=0
 export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 \end{verbatim}
 
-\notebox{To set environment variables persistently, add them to your shell startup script:}
+\notebox{When using the standard \texttt{Loon-Env} workflow, these variables are managed in \texttt{\$HOME/.loon\_env\_setup.bash}, which is automatically sourced by your \texttt{.bashrc}.}
+
+\notebox{To set environment variables manually and persistently, add them to your shell startup script:}
 
 \begin{verbatim}
 echo "export ROS_DOMAIN_ID=0 ROS_LOCALHOST_ONLY=1 RMW_IMPLEMENTATION=rmw_fastrtps_cpp" >> ~/.bashrc
@@ -308,5 +310,3 @@ If the environment variables are not set correctly, return to the ROS 2 package 
 \subsubsection{Troubleshooting}
 
 Check the \href{https://docs.ros.org/en/humble/How-To-Guides/DDS-tuning.html}{DDS settings} if you are having trouble with ROS 2 communication. You may need to set additional environment variables depending on your DDS implementation and network configuration.
-
-

@@ -1,0 +1,35 @@
+\subsection{Rudder Performance Analysis}
+\label{subsec:rudder-performance}
+
+To validate the steering capabilities of the Loon-E, empirical tests were conducted on various rudder profiles and angles. The primary goal was to identify the stall angle where lateral force is maximized before flow separation occurs.
+
+\subsubsection{Angle Optimization Results}
+The following data represents the force produced by a fishtail rudder profile with a surface area of 0.016 $m^2$. As shown in Table \ref{tab:rudder-angle-results}, the maximum force was achieved at a 35$^{\circ}$ angle, confirming it as the optimal stall angle for the chosen profile.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|c|c|c|r|}
+        \hline
+        \textbf{Rudder} & \textbf{Area ($m^2$)} & \textbf{Angle ($^\circ$)} & \textbf{Initial (mm)} & \textbf{Final (mm)} & \textbf{Elongation (mm)} & \textbf{Force (N)} \\
+        \hline
+        Fishtail & 0.016 & 5  & 40.6 & 42.2 & 1.6 & 800 \\
+        Fishtail & 0.016 & 15 & 40.9 & 43.1 & 2.2 & 1100 \\
+        Fishtail & 0.016 & 25 & 40.8 & 44.8 & 4.0 & 2000 \\
+        Fishtail & 0.016 & 35 & 41.1 & 47.9 & 6.8 & 3400 \\
+        Fishtail & 0.016 & 45 & 40.4 & 44.2 & 3.8 & 1900 \\
+        \hline
+    \end{tabular}
+    \caption{Results of Varying Rudder Angle (Ref: Technical Report Appendix F, Table 2)}
+    \label{tab:rudder-angle-results}
+\end{table}
+
+\subsubsection{Tested Profiles}
+Three distinct rudder shapes were evaluated: Fishtail, Triangle, and Oval (see Figure \ref{fig:rudder-shapes}). While the fishtail profile matched expected theoretical outcomes for force production, the triangle and oval profiles yielded less conclusive results during testing.
+
+% TODO: Add images/rudder_shapes.png to the images folder
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{images/rudder_shapes.png}
+%     \caption{Large Fishtail, Medium Triangle, and Small Oval Rudders (Ref: Technical Report Appendix F, Fig. 1a)}
+%     \label{fig:rudder-shapes}
+% \end{figure}

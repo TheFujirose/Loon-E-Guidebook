@@ -30,6 +30,31 @@
 
 The primary computer is the main processing unit of the ASV, responsible for controlling the vehicle and processing data from its sensors. The software running on the primary computer is developed using ROS 2, a popular robotics middleware that provides a framework for building robot applications \autocite{ROSWIKI}.
 
-We use the Jetson Orin Nano as the primary computer for Loon-E.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/control_flow.png}
+    \caption{Loon-E High-Level Control Flow (Ref: Technical Report Fig. 1)}
+    \label{fig:control-flow}
+\end{figure}
+
+We use the Nvidia Jetson Orin Nano (8GB) as the primary computer for Loon-E. It is responsible for high-level tasks including YOLO11-based object detection (trained on the Navier dataset) and a hybrid A* path planning system.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/Loon-E_CAD.jpg}
+    \caption{Loon-E CAD Overview showing sensor and hull configuration (Ref: Technical Report Fig. 2)}
+    \label{fig:vessel-cad}
+\end{figure}
+
+To achieve reliable localization and heading without a high-cost IMU/GPS suite, the system utilizes a Google Pixel 7a smartphone as a data acquisition platform. This device provides high-level orientation estimates via Android's "TYPE\_ROTATION\_VECTOR" sensor fusion and Doppler-based velocity estimates from its GNSS chipset, transmitted to the Jetson via ADB reverse TCP tunneling over USB.
+
+For environmental perception, a Stereolabs ZED X stereoscopic camera is utilized to provide both image data and spatial depth information.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/Loon_E_Cross_Section.png}
+    \caption{Loon-E Cross-Section showing the suspended electronics hatch design (Ref: Technical Report Fig. 4)}
+    \label{fig:electronics-hatch}
+\end{figure}
 
 Details on development for the primary computer can be found in section \ref{sec:active-development} which covers the active development process for the software team, including how to set up the development environment, how to run the software, and how to contribute to the project. It also includes any relevant documentation or resources for developers working on the primary computer software.
