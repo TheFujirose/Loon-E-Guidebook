@@ -24,10 +24,11 @@
 
 % Non technical overview of the GUI
 \subsection{GUI}
+\label{sec:gui}
 
-The GUI component is the visual component of the \hyperref[sec:software-overview]{Loon-E system}.
+The GUI (Graphical User Interface) is the visual component of the \hyperref[sec:software-overview]{Loon-E system}.
 It is responsible for representing the data visually, as shown in Figure \ref{fig:gui}, and it must match the Njord GUI competition requirements \autocite{NJORDGUI}.
-The GUI is implemented as an application in a \hyperref[itm:webclient]{web client}. It communicates with the \hyperref[sec:basestation]{base station} to receive data from the ASV and display it to users.
+The GUI is implemented as a real-time module within the \hyperref[sec:website]{\texttt{HumberASV-Website}} project. It utilizes \textbf{Redux Toolkit} to manage incoming telemetry streams and \textbf{Material UI} for high-fidelity data visualization. It functions as a \hyperref[itm:webclient]{web client} that communicates with the \hyperref[sec:basestation]{base station} to receive telemetry from the ASV and display it to users.
 
 \subsubsection{User Classes and Characteristics}
 The primary users of the system are members of the following:
