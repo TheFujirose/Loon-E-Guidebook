@@ -31,14 +31,7 @@ It will host the following endpoints:
 
 \begin{description}
     \label{itm:endpoints}
-    \item[\textit{/admin}] The admin webpage that allows technical users to manage secure tokens for user access, including creating, revoking, and expiring tokens as needed to maintain security.
-    \item[\textit{/admin/create\_token}] An endpoint for the admin webpage to create secure tokens for user access.
-    \item[\textit{/admin/revoke\_token}] An endpoint for the admin webpage to revoke secure tokens for user access.
-    \item[\textit{/admin/expire\_token}] An endpoint for the admin webpage to expire secure tokens for user access.
-    \item[\textit{/admin/tokens}] An endpoint for the admin webpage to get a list of all active tokens for user access.
-
-    \item[\textit{/client}] The web client application to access the streaming data with a valid token.
-    \item[\textit{/uh\_oh}] An endpoint to handle unauthorized access attempts and display an appropriate error message to users who do not have valid tokens or permissions to access the application.
+    \item[\textit{/client}] The web client application to access the streaming telemetry and video data.
 \end{description}
 
 \subsubsection{Operating Environment}
@@ -50,18 +43,7 @@ Loon-E runs on a Jetson Orin with Ubuntu Jammy Jellyfish (22.04) and uses ROS Hu
 \begin{itemize}
     \item FR-23: The Base Station application shall connect to the ASV using Cyclone DDS communication protocols.
     \item FR-24: The Base Station application shall relay the received data through TCP from the ASV to the web client application for visualization and monitoring by users.
-    \item FR-25: The Base Station application shall handle the authentication and security of the connection with salt-based hashing and token management to ensure that only authorized users can access the data.
     \item FR-26: The Base Station application shall host a website for the web client application.
-    \item FR-27: The Base Station application endpoints shall reject unauthorized access attempts and display an appropriate error message to users who do not have valid tokens or permissions to access the application.
-    \item FR-28: The Base Station shall use the endpoint \textit{/admin} for the admin webpage that allows technical users to create, revoke, or expire tokens as needed to maintain security.
-    \item FR-29: The Base Station shall use the endpoint \textit{/admin/create\_token} for the admin webpage to create secure tokens for user access.
-    \item FR-30: The Base Station shall use the endpoint \textit{/admin/revoke\_token} for the admin webpage to revoke secure tokens for user access.
-    \item FR-31: The Base Station shall use the endpoint \textit{/admin/expire\_token} for the admin webpage to expire secure tokens for user access.
-    \item FR-32: The Base Station shall use the endpoint \textit{/admin/tokens} for the admin webpage to get a list of all active tokens for user access.
-    \item FR-33: The Base Station shall use the endpoint \textit{/client} for the web client application to access the streaming data with a valid token.
-    \item FR-34: The Base Station shall use the endpoint \textit{/uh\_oh} to handle unauthorized access attempts and display an appropriate error message to users who do not have valid tokens or permissions to access the application.
-    \item FR-35: The Base Station shall allow technical users to create a admin user account through terminal commands.
-    \item FR-36: The Base Station application shall allow the admin user to create, revoke, or expire tokens as needed to maintain security.
 \end{itemize}
 
 
@@ -74,32 +56,12 @@ Flask is a lightweight web framework\autocite{FLASK} which can also scale and ha
 We will use flask to create a web server that will handle the following tasks:
 
 \begin{itemize}
-    \item create an API for handling security tokens (under \hyperref[itm:fr-webclient-token]{FR-21} and \hyperref[itm:fr-webclient-admin]{FR-22}) 
     \item to serve the web client application to users.
     \item stream the video feed from process 2.8 (Telemetry) in Figure \ref{fig:base-station-diagram} to the web client application.
     \item stream telemetry data from process 2.8 (Telemetry) in Figure \ref{fig:base-station-diagram} to the web client application for visualization.
 \end{itemize}
 
 \subsubsection{Streaming Video and Telemetry Data}
-
-\subsubsection{Security Token Management}
-Before serving the \textit{/client} page, the website host verifies that telemetry and video streams from the ASV are being received. 
-If the streams are unavailable, the site displays an error page and access to the web client is withheld until data reception resumes. 
-When streams are available, the host prompts the user to enter a token (see the ``Get Login page'' step in the sequence diagram, Figure \ref{fig:seq-connection}). 
-The submitted token is sanitized and checked against the database (D1 in Figure \ref{fig:base-station-diagram} and Figure \ref{fig:seq-connection}); 
-a valid token grants access to the web client and its live telemetry and video, while an invalid token results in an error page denying access. 
-This behavior implements the token API (\hyperref[itm:fr-webclient-token]{FR-21}) and the admin token management features (\hyperref[itm:fr-webclient-admin]{FR-22}), 
-ensuring only authorized users may view ASV data and video feeds.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{./images/GUI/sequence-connection.png}
-    \caption{Sequence Diagram for User Connection to Web Client}
-    \label{fig:seq-connection}
-\end{figure}
-
-\notebox{Technical users, such as the Humber ASV team, will have access to an admin webpage within the web client application that allows them to create, revoke, and expire tokens as needed to maintain security.}
-
 
 \subsubsection{Functional Requirements}
 \begin{itemize}
@@ -122,11 +84,6 @@ ensuring only authorized users may view ASV data and video feeds.
     \item FR-17: The web client application shall use red border color to indicate out of control status.
     \item FR-18: The web client application shall use gray border color to indicate lost connection status.
     \item FR-19: The web client application shall update the border color in real-time based on the ASV's status.
-    \item FR-20: The web client application shall have webpage with a text field that requires a valid token.
-    \item FR-21: The web client application shall require a valid token to access and view the streaming data.
-    \label{itm:fr-webclient-token}
-    \item FR-22: The web client application shall have an admin webpage that allows technical users to manage secure tokens for user access, including creating, revoking, and expiring tokens as needed to maintain security.
-    \label{itm:fr-webclient-admin}
 \end{itemize}
 
 \subsubsection{ASV}
