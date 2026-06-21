@@ -310,3 +310,65 @@ If the environment variables are not set correctly, return to the ROS 2 package 
 \subsubsection{Troubleshooting}
 
 Check the \href{https://docs.ros.org/en/humble/How-To-Guides/DDS-tuning.html}{DDS settings} if you are having trouble with ROS 2 communication. You may need to set additional environment variables depending on your DDS implementation and network configuration.
+
+\subsection{Basestation Wireless Setup}
+\label{sec:basestation-wireless-setup}
+
+The basestation uses a TP-Link EAP225-Outdoor access point \autocite{EAP225OUTDOOR} to provide extended wireless range between the operator laptop and the Loon-E ASV. The access point communicates over Wi-Fi and is powered and connected to the basestation via a passive Power over Ethernet (PoE) adapter.
+
+\subsubsection{Hardware Overview}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{images/components/EAP225/EAP225-Outdoor-Port.jpg}
+    \caption{EAP225-Outdoor bottom port panel, showing the Ethernet port and RESET button.}
+    \label{fig:eap225-port}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{images/components/EAP225/EAP225-Adapter.jpg}
+    \caption{Passive PoE adapter with POE output (to access point) and LAN input (to basestation).}
+    \label{fig:eap225-adapter}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/components/EAP225/TP-Link-Diagram.png}
+    \caption{EAP225-Outdoor wiring diagram. An Ethernet cable (up to 100\,m) runs from the access point to the POE port on the adapter; the LAN port on the adapter connects to the basestation computer \autocite{EAP225OUTDOOR}.}
+    \label{fig:eap225-diagram}
+\end{figure}
+
+\subsubsection{Physical Connection}
+
+\begin{enumerate}
+    \item Run an Ethernet cable from the port on the bottom of the EAP225-Outdoor (Figure \ref{fig:eap225-port}) to the \textbf{POE} port on the passive PoE adapter (Figure \ref{fig:eap225-adapter}).
+    \item Connect a second Ethernet cable from the \textbf{LAN} port on the adapter to the basestation computer's Ethernet port.
+    \item Plug the PoE adapter into a power outlet. The access point will power on via the Ethernet cable.
+\end{enumerate}
+
+\notebox{The Ethernet cable between the EAP225-Outdoor and the PoE adapter can be up to 100\,m in length, as shown in Figure \ref{fig:eap225-diagram}.}
+
+\subsubsection{Access Point Configuration}
+
+Once the hardware is connected and the access point is powered:
+
+\begin{enumerate}
+    \item On the basestation, open a web browser and navigate to the EAP225-Outdoor's default management IP address (refer to the device label or the TP-Link Omada documentation \autocite{EAP225OUTDOOR} for the default address).
+    \item Log in with the default credentials and follow the setup wizard to configure the network name (SSID) and password for the wireless network the ASV will connect to.
+    \item Apply the settings and allow the access point to restart if prompted.
+\end{enumerate}
+
+\subsubsection{Internet Sharing}
+
+To allow devices connected to the access point's wireless network to reach the internet, the basestation's network connection must be shared over Ethernet:
+
+\begin{enumerate}
+    \item On the basestation, open \textbf{Network and Sharing Center} (Windows) or the equivalent network settings panel.
+    \item Locate the active internet-facing network adapter (e.g., Wi-Fi).
+    \item Open its properties, navigate to the \textbf{Sharing} tab, and enable \textit{Allow other network users to connect through this computer's Internet connection}, selecting the Ethernet adapter connected to the PoE adapter as the home network connection.
+\end{enumerate}
+
+\warningbox{Internet sharing exposes the basestation's internet connection to all devices on the access point's network. The team is reviewing whether this configuration should be restricted for security reasons.}
+
+\notebox{The HumberASV team is evaluating automating the access point configuration step using Selenium to reduce manual setup time at competition.}
