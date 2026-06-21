@@ -31,7 +31,7 @@ This can be particularly useful for ROS 2 development, as it can help ensure tha
 
 \warningbox{It is prerequisite to have an understanding of Linux systems before using Docker.}
 
-\notebox{This document assumes you have already set up your environment variables as described in the Section \ref{sec:env-vars-setup} and that you have installed Docker. If you have not done so, please refer to that documentation before proceeding.}
+\notebox{This document explains the underlying configuration required for the project. For most developers, the \texttt{LoonEnv} tool (Section \ref{sec:loon-env}) automates this setup, including Docker installation and network optimization.}
 
 \bigskip
 \subsubsection{Images}
@@ -258,11 +258,13 @@ Begin by sourcing the ROS 2 setup file and setting the necessary environment var
 \begin{verbatim}
 source /opt/ros/humble/setup.bash
 export ROS_DOMAIN_ID=0
-export ROS_LOCALHOST_ONLY=1
+export ROS_LOCALHOST_ONLY=0
 export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 \end{verbatim}
 
-\notebox{To set environment variables persistently, add them to your shell startup script:}
+\notebox{When using the standard \texttt{Loon-Env} workflow, these variables are managed in \texttt{\$HOME/.loon\_env\_setup.bash}, which is automatically sourced by your \texttt{.bashrc}.}
+
+\notebox{To set environment variables manually and persistently, add them to your shell startup script:}
 
 \begin{verbatim}
 echo "export ROS_DOMAIN_ID=0 ROS_LOCALHOST_ONLY=1 RMW_IMPLEMENTATION=rmw_fastrtps_cpp" >> ~/.bashrc
@@ -309,93 +311,64 @@ If the environment variables are not set correctly, return to the ROS 2 package 
 
 Check the \href{https://docs.ros.org/en/humble/How-To-Guides/DDS-tuning.html}{DDS settings} if you are having trouble with ROS 2 communication. You may need to set additional environment variables depending on your DDS implementation and network configuration.
 
+\subsection{Basestation Wireless Setup}
+\label{sec:basestation-wireless-setup}
 
-\subsection{Loon Env}
-\label{sec:loon-env}
-`LoonE` is the operator-facing command installed by Loon-Env for launching and interacting with the Docker-based Loon-E environment \autocite{LOONENV}.
+The basestation uses a TP-Link EAP225-Outdoor access point \autocite{EAP225OUTDOOR} to provide extended wireless range between the operator laptop and the Loon-E ASV. The access point communicates over Wi-Fi and is powered and connected to the basestation via a passive Power over Ethernet (PoE) adapter.
 
-The concepts in setup following Section \ref{sec:docker-setup} and Section \ref{sec:env-vars-setup} are abstracted behind `LoonE` to provide a more user-friendly interface for launching the development environment.
+\subsubsection{Hardware Overview}
 
-To use Loon Env, you can run the following command in your terminal:
-\begin{verbatim}
-    LoonE -h
-\end{verbatim}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{images/components/EAP225/EAP225-Outdoor-Port.jpg}
+    \caption{EAP225-Outdoor bottom port panel, showing the Ethernet port and RESET button.}
+    \label{fig:eap225-port}
+\end{figure}
 
-\subsubsection{What It Does}
-\warningbox{Loon Env is a wrapper around Docker and Docker Compose, so it requires Docker to be installed and properly configured on your system. Ensure that you have Docker installed and that you can run Docker commands from your terminal before using Loon Env.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{images/components/EAP225/EAP225-Adapter.jpg}
+    \caption{Passive PoE adapter with POE output (to access point) and LAN input (to basestation).}
+    \label{fig:eap225-adapter}
+\end{figure}
 
-\begin{itemize}
- \item Wraps Docker and Docker Compose operations behind a short command.
- \item Launches the `zed` and `loone` services defined in the installed `compose.yaml`.
- \item Prepares X11 access with `xhost` and `xauth` when GUI forwarding is needed.
- \item Uses environment variables from `~/.loon-e-env` to decide image names and runtime defaults.
-\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/components/EAP225/TP-Link-Diagram.png}
+    \caption{EAP225-Outdoor wiring diagram. An Ethernet cable (up to 100\,m) runs from the access point to the POE port on the adapter; the LAN port on the adapter connects to the basestation computer \autocite{EAP225OUTDOOR}.}
+    \label{fig:eap225-diagram}
+\end{figure}
 
-The commands are not available while inside the container it builds therefore use the `exit` command to return to your host terminal.
+\subsubsection{Physical Connection}
 
-Any changes you make will not be reflected on the host machine as LoonE build from the \textit{main} branch of the Loon-E repository, so you will need to commit and push your changes to the repository to see them reflected in the LoonE environment. 
+\begin{enumerate}
+    \item Run an Ethernet cable from the port on the bottom of the EAP225-Outdoor (Figure \ref{fig:eap225-port}) to the \textbf{POE} port on the passive PoE adapter (Figure \ref{fig:eap225-adapter}).
+    \item Connect a second Ethernet cable from the \textbf{LAN} port on the adapter to the basestation computer's Ethernet port.
+    \item Plug the PoE adapter into a power outlet. The access point will power on via the Ethernet cable.
+\end{enumerate}
 
-\subsubsection{Building with LoonE}
-The command
-\begin{verbatim}
-    LoonE -b
-\end{verbatim}
-will build the Docker images defined in the `compose.yaml` file. This includes building the Zedx wrapper and the Loon-E development image. 
-The build process may take some time, especially for the Zedx wrapper, as it includes many dependencies and configurations.
-To build the portion without rebuilding the zed wrapper---which takes a long time---you can use the `--loone` option with the `LoonE -b` command to build only the latest from the repository. 
+\notebox{The Ethernet cable between the EAP225-Outdoor and the PoE adapter can be up to 100\,m in length, as shown in Figure \ref{fig:eap225-diagram}.}
 
-\begin{verbatim}
-    LoonE -b --loone
-\end{verbatim}
+\subsubsection{Access Point Configuration}
 
-\subsubsection{Building with simulator with LoonE}
-The build command also takes an arguement `--virtual` which will build with configs for the simulator instead of the real hardware.
-This is useful for developers who do not have access to the real hardware or want to test their code in a simulated environment.
+Once the hardware is connected and the access point is powered:
 
-\begin{verbatim}
-    LoonE -b --zedx --virtual
-\end{verbatim}
+\begin{enumerate}
+    \item On the basestation, open a web browser and navigate to the EAP225-Outdoor's default management IP address (refer to the device label or the TP-Link Omada documentation \autocite{EAP225OUTDOOR} for the default address).
+    \item Log in with the default credentials and follow the setup wizard to configure the network name (SSID) and password for the wireless network the ASV will connect to.
+    \item Apply the settings and allow the access point to restart if prompted.
+\end{enumerate}
 
-\subsubsection{Running with LoonE}
-To run the Loon-E development environment, you can use the following command:
-\begin{verbatim}
-    LoonE --start
-\end{verbatim}
-This will start the Docker containers for the Zedx wrapper and the Loon-E development environment. 
-You can then access the development environment through the terminal or by using a remote desktop application if GUI forwarding is set up.
+\subsubsection{Internet Sharing}
 
-\subsubsection{Stopping with LoonE}
-To stop the Loon-E development environment, you can use the following command:
-\begin{verbatim}
-    LoonE --stop
-\end{verbatim}
+To allow devices connected to the access point's wireless network to reach the internet, the basestation's network connection must be shared over Ethernet:
 
-depending on the presence of `zed` or `loone` in the arguements, this will stop the corresponding containers. You can also use `LoonE --stop` to stop all containers related to Loon-E.
+\begin{enumerate}
+    \item On the basestation, open \textbf{Network and Sharing Center} (Windows) or the equivalent network settings panel.
+    \item Locate the active internet-facing network adapter (e.g., Wi-Fi).
+    \item Open its properties, navigate to the \textbf{Sharing} tab, and enable \textit{Allow other network users to connect through this computer's Internet connection}, selecting the Ethernet adapter connected to the PoE adapter as the home network connection.
+\end{enumerate}
 
-\subsubsection{Cleaning with LoonE}
-To clean up the Docker environment, you need to use composer commands to remove the containers, images, and volumes created by LoonE. You
-    can use the following command to clean up the environment:
-\begin{verbatim}
-    docker compose -f "$ASSET_DIR/compose.yaml" down --rmi all -v
-\end{verbatim}
+\warningbox{Internet sharing exposes the basestation's internet connection to all devices on the access point's network. The team is reviewing whether this configuration should be restricted for security reasons.}
 
-The ASSET\_DIR environment variable is set by Loon-Env to point to the directory where the `compose.yaml` file is located.
-This command will stop and remove all containers, remove all images, and remove all volumes associated with the Loon-E development environment.
-
-\notebox{This is useful if you need to rebuild and it's still using cache}
-
-\subsubsection{Development in containers}
-
-When you run the Loon-E development environment, you will be inside a Docker container that has ROS 2 and the necessary dependencies installed. You can use this environment to develop your ROS 2 packages, test your code, and run simulations.
-
-It's likely you'll want to enter the `loone` container to develop Loon-E specific code. You can do this with the following command:
-
-\begin{verbatim}
-    docker exec -it loone bash
-\end{verbatim}
-
-or determine the container ID with `docker ps` and use that ID in place of `loone` in the command above. This will give you access to the terminal inside the container, where you can navigate to your ROS 2 workspace, build your packages with `colcon`, and run your ROS 2 nodes.
-
-\warningbox{Remember that any changes you make inside the container will not be reflected on the host machine unless you commit those changes to the repository and rebuild the image. Make sure to push your changes to the repository to see them reflected in the Loon-E environment.}
-
-\notebox{Inside the container you can specify what packages to build with colcon build --packages-select package\_name to speed up the build process.}
+\notebox{The HumberASV team is evaluating automating the access point configuration step using Selenium to reduce manual setup time at competition.}

@@ -27,7 +27,22 @@
 
 \subsection{Website}
 \label{sec:website}
-HumberASV's website is a component for the RoboBoat competition \autocite{ROBOBOAT}.
-It details our team, our ASV, and our software, and provides a way for the public to learn about our project and follow our progress. 
-The website is built using modern web technologies (Vite and React) and is designed to be responsive and user-friendly. 
-It includes sections on our team members, our ASV's design and capabilities, and technical report. 
+The \texttt{HumberASV-Website} is a centralized platform that serves two primary purposes: acting as the public-facing presence for the RoboBoat competition \autocite{ROBOBOAT} and providing the real-time telemetry GUI required for the Njord competition \autocite{NJORDGUI}.
+
+\subsubsection{Implementation Details}
+The application is built using a modern frontend stack to ensure performance, responsiveness, and maintainability:
+\begin{itemize}
+    \item \textbf{Vite}: The build tool and development server, chosen for its fast Hot Module Replacement (HMR) and optimized build process.
+    \item \textbf{React \& TypeScript}: Used to build a type-safe, component-based user interface. TypeScript is critical for ensuring that complex telemetry data structures from the \hyperref[sec:basestation]{base station} are handled consistently.
+    \item \textbf{Material UI (MUI)}: A comprehensive component library used to provide a professional, consistent design language and accessible UI components for the dashboard.
+    \item \textbf{Redux Toolkit}: Handles global state management, which is essential for processing and distributing high-frequency telemetry data across multiple dashboard widgets.
+    \item \textbf{Framer Motion \& Use-Gesture}: These libraries are used to implement fluid animations and interactive gestures, improving the user experience during live mission monitoring.
+\end{itemize}
+
+\subsubsection{Functional Sections}
+The platform is architected into three primary functional areas:
+\begin{itemize}
+    \item \textbf{Public Outreach}: A section showcasing team members, ASV design specifications, and hosting the Technical Design Report (TDR).
+    \item \textbf{Live GUI}: The telemetry dashboard described in Section \ref{sec:gui}. It visualizes real-time data such as GPS coordinates, battery levels, and system health status using dynamic components.
+    \item \textbf{Admin Portal}: A secure area for technical team members to manage user access and generate the secure tokens required for the base station-to-client handshake.
+\end{itemize}

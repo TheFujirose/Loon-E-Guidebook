@@ -31,22 +31,39 @@ Once connected to the primary computer, a \href{https://github.com/HumberASV/Loo
 To start the software, developers can run the following command in the terminal:
 
 \begin{verbatim}
-    LoonE --start
+    LoonE -s loone
 \end{verbatim}
-This command will build and execute a docker container from configurations installed from the \href{https://github.com/HumberASV/Loon-Env}{custom script's install features}.
+This command starts the \texttt{loone} service container using the configuration installed by \href{https://github.com/HumberASV/Loon-Env}{Loon-Env}. 
 
-\infobox{ The LoonE command is installed with the \textit{/install.bash} located in the repository, which is run as part of the setup process. This command is a custom script that simplifies the process of starting the software by automating the necessary steps to build and run the software in a Docker container.}
-\warningbox{ The LoonE command may also freeze the terminal and cause a temporary ~10 minute loss of connection to the ASV, but this is normal as the software is starting up and may take some time to build. It is not recommended to stop the process of building the container.}
+If images are not built yet, you must build them specifying a profile (\texttt{--virtual} or \texttt{--hardware}):
+
+\begin{verbatim}
+    LoonE -b --virtual loone
+    # OR
+    LoonE -b --hardware loone
+\end{verbatim}
+
+\infobox{The LoonE command is installed by \textit{LoonEnv} as part of setup. It simplifies container lifecycle operations such as build (\texttt{-b}), start (\texttt{-s}), and enter (\texttt{-e}).}
+\warningbox{ The colcon build command on zed services may also freeze the terminal and cause a temporary ~10 minute loss of connection to the ASV, but this is normal as the software is starting up and may take some time to build. It is not recommended to stop the process of building the container.}
 \footnote{A docker container either downloads the scripts or establishes a volume from the host which has the scripts.}
 
-\warningbox{Changes in container will not be saved}
+\warningbox{Use the normal container user for development; reserve \texttt{sudo} for maintenance tasks such as package refresh or dependency installation.}
 
 You may need to enter the container in multiple terminals to run different processes. 
 Follow the instructions below to enter the container:
 
 \begin{verbatim}
-    docker ps # to get the container id or name
+    LoonE -e loone
+    # or use Docker directly:
+    docker ps
     docker exec -it <container_id_or_name> /bin/bash
+\end{verbatim}
+
+\subsubsection{Building within the Container}
+While inside a container, you should use \texttt{LoonTools} to handle the ROS 2 build process. This ensures dependencies are checked and the environment is sourced correctly.
+
+\begin{verbatim}
+    LoonTools --colcon loone
 \end{verbatim}
 
 For our environment it is set to build ZedXWrapper from our \href{https://github.com/HumberASV/zed-ros2-wrapper}{main repository} instead of stereolabs' repository.
@@ -68,11 +85,25 @@ This command will launch the ROS2 nodes---including Zedx-Wrapper---for the Loon-
 \notebox{For most issues, you may benefit from reading Section \ref{sec:docker-setup} or \ref{sec:colcon-setup} to ensure your environment is set up correctly.}
 If you encounter issues while running the software, here are some common troubleshooting steps:
 
+\subsubsection{General Health and Diagnostics}
+Before troubleshooting specific components, check the overall environment health:
+
+\begin{itemize}
+    \item \textbf{Container Status}: Run \texttt{LoonE --health} to see which services are built and running.
+    \item \textbf{System Audit}: Run \texttt{LoonTools --doctor} to check for missing dependencies, incorrect environment variables, or networking issues.
+    \item \textbf{Network Check}: Run \texttt{LoonTools --mtu} to ensure your physical interfaces are configured for Jumbo Frames (MTU 9000), which is required for ZEDX.
+\end{itemize}
+
 \subsubsection{Camera not connecting}
 If the ZedX camera is not connecting or functioning properly, try the following steps:
     \begin{itemize}
         \item Ensure that the ZedX camera is properly connected to the primary computer and powered on.
         \item Check the camera's physical connection and power status, and ensure that it is securely plugged in.
+        \item Verify that Jumbo Frames are enabled on the host:
+            \begin{verbatim}
+                LoonTools --mtu
+            \end{verbatim}
+            If they are not, run \texttt{sudo configMTU} to fix the interface settings.
         \item Verify that the necessary drivers and software for the ZedX camera are installed and up to date \\
             \begin{verbatim}
                 apt list --installed | grep zed
